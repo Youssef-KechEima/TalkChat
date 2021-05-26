@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Auth.LoginActivity"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/BlueImages"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="284dp"
+            android:contentDescription="@string/Image"
+            android:src="@drawable/chat_image" />
+    </LinearLayout>
+    <EditText
+        android:id="@+id/email_Login"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="50dp"
+        android:hint="@string/Email"
+        android:backgroundTint="@color/purple_200"
+        android:autofillHints="@string/Email"
+        android:layout_marginStart="50dp"
+        android:inputType="textEmailAddress"
+        tools:targetApi="lollipop" />
+    <EditText
+        android:id="@+id/password_Login"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="50dp"
+        android:hint="@string/Password"
+        android:backgroundTint="@color/purple_200"
+        android:layout_marginStart="50dp"
+        android:inputType="textPassword"
+        tools:ignore="Autofill"
+        tools:targetApi="lollipop" />
+
+    <Button
+        android:id="@+id/Btn_Login"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/curve_button_login"
+        android:text="@string/log_in"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:backgroundTint="@color/purple_500" />
+    <TextView
+        android:id="@+id/forgrt_Password"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/forget_password"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textColor="@color/purple_500"
+        android:textColorLink="@color/purple_700"
+        tools:ignore="KeyboardInaccessibleWidget" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="40dp"
+        android:layout_gravity="center">
+        <View
+            android:layout_width="150dp"
+            android:layout_height="1dp"
+            android:background="@color/gray"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="OR"/>
+        <View
+            android:layout_width="150dp"
+            android:layout_height="1dp"
+            android:background="@color/gray"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/Btn_regester"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/sign_in"
+        android:text="@string/Create_New_Account"
+        android:textStyle="bold"
+        app:backgroundTint="#38D31A" />
+
+    <Button
+        android:id="@+id/Btn_Facebook"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/facebook_button"
+        android:text="Continue with Facebook"
+        android:textStyle="bold"
+        android:drawableLeft="@drawable/facebook"
+
+        app:backgroundTint="#3861E3" />
+</LinearLayout>

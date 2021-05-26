@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:padding="8dp"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="300dp"
+        android:layout_alignParentEnd="true"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ProfileImage"
+            android:visibility="gone"/>
+        <TextView
+            android:id="@+id/show_Message"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/background_item_sender"
+            android:text="Whats up"
+            android:textSize="18dp"
+            android:textColor="@color/white"
+            android:padding="8dp"
+            android:layout_alignParentRight="true" />
+        <TextView
+            android:id="@+id/TimeMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:paddingLeft="2dp"
+            android:layout_toLeftOf="@+id/show_Message"
+            android:background="@drawable/background_item_sender"
+            android:text="11:50"
+            android:textSize="8dp"
+            android:layout_alignBottom="@+id/show_Message"
+            android:textColor="@color/white"
+            android:padding="8dp"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+
+</RelativeLayout>

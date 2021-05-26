@@ -1,0 +1,2 @@
+include ':app'
+rootProject.name = "TopChat_v1.2"

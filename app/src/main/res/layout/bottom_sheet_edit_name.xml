@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:padding="15sp"
+    android:layout_height="wrap_content">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter your name"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="15sp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/EditFirstName"
+            android:layout_marginTop="10dp"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:hint="Your first name"
+            android:layout_marginRight="40dp" />
+        <EditText
+            android:id="@+id/EditLastName"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="40dp"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:hint="Your Last name"
+            android:layout_marginRight="40dp" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/Cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:background="@android:color/transparent"
+            android:textColor="@color/purple_500"/>
+        <Button
+            android:id="@+id/Save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:background="@android:color/transparent"
+            android:textColor="@color/purple_500"/>
+
+    </LinearLayout>
+
+</LinearLayout>

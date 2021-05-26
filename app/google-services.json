@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "993446157944",
+    "firebase_url": "https://topchat-55-02-default-rtdb.firebaseio.com",
+    "project_id": "topchat-55-02",
+    "storage_bucket": "topchat-55-02.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:993446157944:android:4ded70c23774dbc388978d",
+        "android_client_info": {
+          "package_name": "youssef.kecheima.topchat_v12"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "993446157944-k5si7f4jde7bvlahkj0f7kbq75jqun32.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDblnQ39RPOaLWwNKm6k1zG-ZpIvubmv1E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "993446157944-k5si7f4jde7bvlahkj0f7kbq75jqun32.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

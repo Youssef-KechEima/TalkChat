@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">TalkChat</string>
+    <string name="Image">Chat_logo</string>
+    <string name="Email">Email</string>
+    <string name="Password">Password</string>
+    <string name="log_in">Log In</string>
+    <string name="forget_password">Forget Password</string>
+    <string name="Create_New_Account">Create new Account</string>
+    <string name="terme_and_conditions">By clicking on Regester Button you Accept <a href="https://www.termsandconditionsgenerator.com/live.php?token=nZKHnMQjQDIXqqr641oIBrB0EDT8iQW5">the terme and the Conditions</a></string>
+    <string name="fist_name">Fist Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="birthday">BirthDay</string>
+    <string name="regester">Regester</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="privacy_password_email">Privacy, password, Email</string>
+    <string name="account">Account</string>
+    <string name="Chat">Chat</string>
+    <string name="Notifications">Notifications</string>
+    <string name="Help">Help</string>
+    <string name="Invite_Friends">Invite Friends</string>
+    <string name="username">UserName</string>
+    <string name="chat_history_wallpaper">Chat history, wallpaper</string>
+    <string name="message_call_tones">Message, Call tones</string>
+    <string name="help_center_contact_us_privacy_policy">Help center, contact us, privacy policy</string>
+    <string name="t_o_p_c_h_a_t">T A L K C H A T</string>
+    <string name="from">from</string>
+    <string name="lastmessage">LastMessage</string>
+    <string name="TimeAndDay">Time and Day</string>
+    <string name="userEmail">UserEmail</string>
+    <string name="Gender">Gender</string>
+    <string name="add_friend">Add Friend</string>
+    <string name="cancel">Cancel Request</string>
+    <string name="friends">Friends</string>
+    <string name="AcceptRequest">Accept Friend Request</string>
+    <string name="Decline_Request">Decline Request</string>
+    <string name="Desc">Description</string>
+    <string name="About">About</string>
+</resources>

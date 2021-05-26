@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:padding="8dp"
+    android:layout_height="wrap_content">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ProfileImage"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/empty_user"/>
+    <TextView
+        android:id="@+id/show_Message"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/ProfileImage"
+        android:text="Hello"
+        android:textSize="18dp"
+        android:padding="8dp"
+        android:background="@drawable/background_item_receiver"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/ProfileImage"
+        android:background="@drawable/background_item_receiver"
+        android:layout_marginLeft="155dp"
+        android:paddingLeft="2dp"
+        android:layout_alignBottom="@id/show_Message"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical">
+    <TextView
+        android:id="@+id/TimeMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:text="11:50"
+        android:textSize="8dp"
+        android:padding="8dp"
+        android:layout_alignParentRight="true"/>
+    </LinearLayout>
+
+</RelativeLayout>
