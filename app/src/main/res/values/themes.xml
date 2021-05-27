@@ -28,7 +28,7 @@
     </style>
 
     <style name="OverFlow" parent="@style/Widget.AppCompat.Light.ActionButton.Overflow">
-        <item name="android:textColorSecondary">@color/black</item>
+        <item name="android:src">@drawable/menu_dots</item>
     </style>
 
     <style name="BottomSheetStyle" parent="Theme.Design.Light.BottomSheetDialog">
