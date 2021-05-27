@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -57,6 +58,7 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import youssef.kecheima.topchat_v12.Adapters.MessageAdapter;
+import youssef.kecheima.topchat_v12.Fragments.RequestFragment;
 import youssef.kecheima.topchat_v12.Model.Chat;
 import youssef.kecheima.topchat_v12.Model.User;
 import youssef.kecheima.topchat_v12.R;
@@ -96,6 +98,9 @@ public class MessageActivity extends AppCompatActivity {
         //get idUser
         Intent intent = getIntent();
         String newUserId=intent.getStringExtra("newUserId");
+
+
+
 
         //FireBase Instances
         firebaseUser= FirebaseAuth.getInstance().getCurrentUser();

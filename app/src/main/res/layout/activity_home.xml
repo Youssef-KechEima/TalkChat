@@ -24,8 +24,8 @@
             app:tabIndicatorColor="@color/purple_500"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
     </com.google.android.material.appbar.AppBarLayout>
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/ViewPager"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/ViewPager2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/AppBarLayout"/>

@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -17,11 +19,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -35,10 +43,10 @@ import youssef.kecheima.topchat_v12.Settings.SettingsActivity;
 public class HomeActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private TabLayout tabLayout;
-    private ViewPager viewPager;
-    private FragmentsAdapter fragmentsAdapter;
-    private DatabaseReference statusRef;
+    private ViewPager2 viewPager2;
+    private DatabaseReference statusRef,friendRequestRef;
     private FirebaseUser firebaseUser;
+    private BadgeDrawable badgeDrawable;
 
 
     //Main Methode
@@ -50,47 +58,75 @@ public class HomeActivity extends AppCompatActivity {
         statusBar_and_actionBar_Tool();
 
         statusRef= FirebaseDatabase.getInstance().getReference("UserStatus");
+        friendRequestRef=FirebaseDatabase.getInstance().getReference("Friendsrequest");
         firebaseUser=FirebaseAuth.getInstance().getCurrentUser();
         FirebaseMessaging.getInstance().subscribeToTopic(firebaseUser.getUid());
 
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.chat));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.people));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.request));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.phone));
-        tabLayout.getTabAt(0).getIcon().setColorFilter(getResources().getColor(R.color.purple_500), PorterDuff.Mode.SRC_IN);
 
+        viewPager2.setAdapter(new FragmentsAdapter(this));
+         TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
+             @Override
+             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+                 switch (position){
+                     case 0:
+                         tab.setIcon(R.drawable.chat);
+                         tab.getIcon().setColorFilter(getResources().getColor(R.color.purple_500), PorterDuff.Mode.SRC_IN);
+                         break;
+                     case 1:
+                         tab.setIcon(R.drawable.people);
+                         break;
+                     case 2:
+                         tab.setIcon(R.drawable.request);
+                         badgeDrawable=tab.getOrCreateBadge();
+                         badgeDrawable.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.red));
+                         badgeDrawable.setVisible(false);
+                         break;
+                     case 3:
+                         tab.setIcon(R.drawable.phone);
+                         break;
+                 }
+             }
+         });
 
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+      tabLayoutMediator.attach();
 
-        fragmentsAdapter= new FragmentsAdapter(getSupportFragmentManager(),tabLayout.getTabCount());
+      friendRequestRef.child(firebaseUser.getUid());
+      friendRequestRef.addValueEventListener(new ValueEventListener() {
+          @Override
+          public void onDataChange(@NonNull DataSnapshot snapshot) {
+              if(snapshot.exists()){
+                  int request = (int)snapshot.getChildrenCount();
+                  badgeDrawable.setVisible(true);
+                  badgeDrawable.setNumber(request);
+              }
+          }
 
-        viewPager.setAdapter(fragmentsAdapter);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                super.onTabSelected(tab);
-                viewPager.setCurrentItem(tab.getPosition());
-                int tabIconColor=ContextCompat.getColor(getApplicationContext(),R.color.purple_500);
-                tab.getIcon().setColorFilter(tabIconColor, PorterDuff.Mode.SRC_IN);
-            }
+          @Override
+          public void onCancelled(@NonNull DatabaseError error) {
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                super.onTabUnselected(tab);
-                int tabIconColor=ContextCompat.getColor(getApplicationContext(),R.color.black);
-                tab.getIcon().setColorFilter(tabIconColor, PorterDuff.Mode.SRC_IN);
+          }
+      });
 
-            }
+      tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+          @Override
+          public void onTabSelected(TabLayout.Tab tab) {
+              int tabIconSelected=ContextCompat.getColor(getApplicationContext(),R.color.purple_500);
+              tab.getIcon().setColorFilter(tabIconSelected, PorterDuff.Mode.SRC_IN);
+          }
 
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-                super.onTabReselected(tab);
-                int tabIconColor=ContextCompat.getColor(getApplicationContext(),R.color.purple_500);
-                tab.getIcon().setColorFilter(tabIconColor, PorterDuff.Mode.SRC_IN);
+          @Override
+          public void onTabUnselected(TabLayout.Tab tab) {
+              int tabIconSelected=ContextCompat.getColor(getApplicationContext(),R.color.black);
+              tab.getIcon().setColorFilter(tabIconSelected, PorterDuff.Mode.SRC_IN);
 
-            }
-        });
+          }
+
+          @Override
+          public void onTabReselected(TabLayout.Tab tab) {
+
+          }
+      });
+
     }
 
     private void checkOnlineStatus(String status){
@@ -156,7 +192,7 @@ public class HomeActivity extends AppCompatActivity {
     private void components() {
         toolbar=findViewById(R.id.Toolbar);
         tabLayout=findViewById(R.id.tabLayout);
-        viewPager=findViewById(R.id.ViewPager);
+        viewPager2=findViewById(R.id.ViewPager2);
     }
     //StatusBar and ActionBar
     @SuppressLint("NewApi")

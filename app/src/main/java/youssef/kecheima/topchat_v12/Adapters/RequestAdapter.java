@@ -2,6 +2,7 @@ package youssef.kecheima.topchat_v12.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import youssef.kecheima.topchat_v12.Fragments.RequestFragment;
 import youssef.kecheima.topchat_v12.Message.MessageActivity;
 import youssef.kecheima.topchat_v12.Model.Request;
 import youssef.kecheima.topchat_v12.Model.User;
@@ -65,6 +67,11 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.MyViewHo
             public void onClick(View v) {
                 context.startActivity(new Intent(context, FriendProfileActivity.class)
                         .putExtra("newUserId",hisUid));
+
+                Bundle bundle = new Bundle();
+                bundle.putString("otherUserId",hisUid);
+                RequestFragment fragment = new RequestFragment();
+                fragment.setArguments(bundle);
             }
         });
         holder.btn_Accept.setOnClickListener(new View.OnClickListener() {

@@ -1,5 +1,6 @@
 package youssef.kecheima.topchat_v12.Fragments;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -34,6 +35,8 @@ import youssef.kecheima.topchat_v12.Model.Request;
 import youssef.kecheima.topchat_v12.Model.User;
 import youssef.kecheima.topchat_v12.R;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 public class RequestFragment extends Fragment {
 
@@ -58,6 +61,9 @@ public class RequestFragment extends Fragment {
         View view=inflater.inflate(R.layout.fragment_request, container, false);
         recyclerRequest=view.findViewById(R.id.RequestRecycler);
 
+        Bundle bundle=this.getArguments();
+        String otherUserId=bundle.getString("otherUserId");
+
         firebaseFirestore= FirebaseFirestore.getInstance();
         firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
         recyclerRequest.setHasFixedSize(true);
@@ -66,7 +72,8 @@ public class RequestFragment extends Fragment {
         userList = new ArrayList<>();
         requestList = new ArrayList<>();
 
-        databaseReference= FirebaseDatabase.getInstance().getReference("Friendsrequest").child(firebaseUser.getUid());
+
+        databaseReference= FirebaseDatabase.getInstance().getReference("Friendsrequest").child(firebaseUser.getUid()).child(otherUserId);
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
