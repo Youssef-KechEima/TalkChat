@@ -29,6 +29,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -44,7 +45,7 @@ public class HomeActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager2 viewPager2;
-    private DatabaseReference statusRef,friendRequestRef;
+    private DatabaseReference statusRef;
     private FirebaseUser firebaseUser;
     private BadgeDrawable badgeDrawable;
 
@@ -58,7 +59,6 @@ public class HomeActivity extends AppCompatActivity {
         statusBar_and_actionBar_Tool();
 
         statusRef= FirebaseDatabase.getInstance().getReference("UserStatus");
-        friendRequestRef=FirebaseDatabase.getInstance().getReference("Friendsrequest");
         firebaseUser=FirebaseAuth.getInstance().getCurrentUser();
         FirebaseMessaging.getInstance().subscribeToTopic(firebaseUser.getUid());
 
@@ -90,22 +90,26 @@ public class HomeActivity extends AppCompatActivity {
 
       tabLayoutMediator.attach();
 
-      friendRequestRef.child(firebaseUser.getUid());
-      friendRequestRef.addValueEventListener(new ValueEventListener() {
-          @Override
-          public void onDataChange(@NonNull DataSnapshot snapshot) {
-              if(snapshot.exists()){
-                  int request = (int)snapshot.getChildrenCount();
-                  badgeDrawable.setVisible(true);
-                  badgeDrawable.setNumber(request);
-              }
-          }
+        Query query= FirebaseDatabase.getInstance().getReference("Friendsrequest").child(firebaseUser.getUid()).orderByChild("request_type").equalTo("received");
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int requests=(int)snapshot.getChildrenCount();
+                if(requests==0){
+                    badgeDrawable.setVisible(false);
+                }
+                else {
+                    badgeDrawable.setVisible(true);
+                    badgeDrawable.setNumber(requests);
+                }
+            }
 
-          @Override
-          public void onCancelled(@NonNull DatabaseError error) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-          }
-      });
+            }
+        });
+
 
       tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
           @Override

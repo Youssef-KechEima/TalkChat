@@ -237,6 +237,12 @@ public class MessageActivity extends AppCompatActivity {
                     JSONObject jsonObject1= new JSONObject();
                     jsonObject1.put("title",user.getUser_name());
                     jsonObject1.put("body",message);
+
+                    JSONObject jsonObject2=new JSONObject();
+                    jsonObject2.put("UserId",firebaseUser.getUid());
+                    jsonObject2.put("type","message");
+
+                    jsonObject.put("data",jsonObject2);
                     jsonObject.put("notification",jsonObject1);
 
                     JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, baseUrl, jsonObject, new Response.Listener<JSONObject>() {

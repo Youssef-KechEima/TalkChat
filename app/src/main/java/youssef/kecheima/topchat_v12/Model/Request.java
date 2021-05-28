@@ -19,7 +19,7 @@ public class Request {
         this.request_id = request_id;
     }
 
-    public String getEquest_type() {
+    public String getRequest_type() {
         return equest_type;
     }
 

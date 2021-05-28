@@ -21,8 +21,6 @@ public class FirebaseMessaging extends FirebaseMessagingService {
         String title=remoteMessage.getNotification().getTitle();
         String body=remoteMessage.getNotification().getBody();
         Uri sound= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        Intent intent= new Intent(this, MessageActivity.class);
-        PendingIntent pendingIntent= PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_ONE_SHOT);
 
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(),"Message");
@@ -30,10 +28,16 @@ public class FirebaseMessaging extends FirebaseMessagingService {
         builder.setContentText(body);
         builder.setSmallIcon(R.drawable.notification_icon);
         builder.setSound(sound);
+        Intent intent=null;
+        if(remoteMessage.getData().get("type").equalsIgnoreCase("message")){
+            intent=new Intent(this,MessageActivity.class);
+            intent.putExtra("newUserId",remoteMessage.getData().get("UserId"));
+        }
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,101,intent,PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
 
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        manager.notify(123,builder.build());
+        manager.notify(1234,builder.build());
     }
 }

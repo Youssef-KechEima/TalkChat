@@ -20,6 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -61,8 +62,6 @@ public class RequestFragment extends Fragment {
         View view=inflater.inflate(R.layout.fragment_request, container, false);
         recyclerRequest=view.findViewById(R.id.RequestRecycler);
 
-        Bundle bundle=this.getArguments();
-        String otherUserId=bundle.getString("otherUserId");
 
         firebaseFirestore= FirebaseFirestore.getInstance();
         firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
@@ -73,8 +72,8 @@ public class RequestFragment extends Fragment {
         requestList = new ArrayList<>();
 
 
-        databaseReference= FirebaseDatabase.getInstance().getReference("Friendsrequest").child(firebaseUser.getUid()).child(otherUserId);
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        Query query= FirebaseDatabase.getInstance().getReference("Friendsrequest").child(firebaseUser.getUid()).orderByChild("request_type").equalTo("received");
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 requestList.clear();
@@ -103,8 +102,8 @@ public class RequestFragment extends Fragment {
                     User user = data.toObject(User.class);
                     for (Request request:requestList){
                         if(user.getId()!=null && user.getId().equals(request.getRequest_id())){
-                            userList.add(user);
-                            break;
+                                userList.add(user);
+                                break;
                         }
                     }
                     requestAdapter= new RequestAdapter(getContext(),userList);
