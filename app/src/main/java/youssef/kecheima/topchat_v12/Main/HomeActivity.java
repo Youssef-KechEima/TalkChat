@@ -71,7 +71,6 @@ public class HomeActivity extends AppCompatActivity {
                      case 0:
                          tab.setIcon(R.drawable.chat);
                          tab.getIcon().setColorFilter(getResources().getColor(R.color.purple_500), PorterDuff.Mode.SRC_IN);
-                         tab.setIcon(R.drawable.request);
                          badgeDrawable=tab.getOrCreateBadge();
                          badgeDrawable.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.red));
                          badgeDrawable.setVisible(false);

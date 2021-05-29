@@ -194,7 +194,7 @@ public class MessageActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent1 = new Intent(MessageActivity.this, FriendProfileActivity.class);
                 intent1.putExtra("newUserId",newUserId);
-                startActivity(intent);
+                startActivity(intent1);
             }
         });
     }
