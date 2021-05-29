@@ -20,6 +20,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,6 +63,7 @@ import youssef.kecheima.topchat_v12.Fragments.RequestFragment;
 import youssef.kecheima.topchat_v12.Model.Chat;
 import youssef.kecheima.topchat_v12.Model.User;
 import youssef.kecheima.topchat_v12.R;
+import youssef.kecheima.topchat_v12.Settings.FriendProfileActivity;
 
 public class MessageActivity extends AppCompatActivity {
     private CircleImageView userImage;
@@ -77,6 +79,7 @@ public class MessageActivity extends AppCompatActivity {
     private RecyclerView messageRecycler;
     private String baseUrl="https://fcm.googleapis.com/fcm/send";
     private RequestQueue requestQueue;
+    private LinearLayout userBar;
 
 
     //Main Methode
@@ -185,6 +188,15 @@ public class MessageActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        userBar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(MessageActivity.this, FriendProfileActivity.class);
+                intent1.putExtra("newUserId",newUserId);
+                startActivity(intent);
+            }
+        });
     }
 
     //Mehhode to verify the messge then send it
@@ -211,12 +223,18 @@ public class MessageActivity extends AppCompatActivity {
         databaseReference.child("Chats").push().setValue(hashMap);
 
         //add ChatList Receiver
+        Map<String,String> inboxReceiver= new HashMap<>();
+        inboxReceiver.put("chat_id",receiver);
+        inboxReceiver.put("message_type","received");
         DatabaseReference listref1=FirebaseDatabase.getInstance().getReference("Inbox").child(sender).child(receiver);
-        listref1.child("chat_id").setValue(receiver);
+        listref1.setValue(inboxReceiver);
 
         //add ChatList Sender
+        Map<String,String> inboxSender = new HashMap<>();
+        inboxSender.put("chat_id",sender);
+        inboxSender.put("message_type","sent");
         DatabaseReference listref2=FirebaseDatabase.getInstance().getReference("Inbox").child(receiver).child(sender);
-        listref2.child("chat_id").setValue(sender);
+        listref2.setValue(inboxSender);
 
 
         //send Notification
@@ -335,6 +353,7 @@ public class MessageActivity extends AppCompatActivity {
         sendBtn=findViewById(R.id.send_btn);
         messageRecycler=findViewById(R.id.MessageRecycler);
         status=findViewById(R.id.MessageLastSeen);
+        userBar=findViewById(R.id.Userbar);
     }
 
     //StatusBar and ActionBar

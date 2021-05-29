@@ -71,6 +71,10 @@ public class HomeActivity extends AppCompatActivity {
                      case 0:
                          tab.setIcon(R.drawable.chat);
                          tab.getIcon().setColorFilter(getResources().getColor(R.color.purple_500), PorterDuff.Mode.SRC_IN);
+                         tab.setIcon(R.drawable.request);
+                         badgeDrawable=tab.getOrCreateBadge();
+                         badgeDrawable.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.red));
+                         badgeDrawable.setVisible(false);
                          break;
                      case 1:
                          tab.setIcon(R.drawable.people);
@@ -101,6 +105,26 @@ public class HomeActivity extends AppCompatActivity {
                 else {
                     badgeDrawable.setVisible(true);
                     badgeDrawable.setNumber(requests);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        Query query1 =FirebaseDatabase.getInstance().getReference("Inbox").child(firebaseUser.getUid()).orderByChild("message_type").equalTo("received");
+        query1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int inbox=(int)snapshot.getChildrenCount();
+                if(inbox==0){
+                    badgeDrawable.setVisible(false);
+                }
+                else {
+                    badgeDrawable.setVisible(true);
+                    badgeDrawable.setNumber(inbox);
                 }
             }
 
