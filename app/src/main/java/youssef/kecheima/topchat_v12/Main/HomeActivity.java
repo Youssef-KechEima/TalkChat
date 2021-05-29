@@ -106,7 +106,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        Query query1 =FirebaseDatabase.getInstance().getReference("Inbox").child(firebaseUser.getUid()).orderByChild("message_type").equalTo("sent");
+        Query query1 =FirebaseDatabase.getInstance().getReference("Inbox").child(firebaseUser.getUid()).orderByChild("message_type").equalTo("received");
         query1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
