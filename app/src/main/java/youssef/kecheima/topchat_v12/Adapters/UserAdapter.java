@@ -2,7 +2,6 @@ package youssef.kecheima.topchat_v12.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,15 +9,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
-
-import java.util.ArrayList;
 import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
-import youssef.kecheima.topchat_v12.Fragments.RequestFragment;
-import youssef.kecheima.topchat_v12.Message.MessageActivity;
 import youssef.kecheima.topchat_v12.Model.User;
 import youssef.kecheima.topchat_v12.R;
-import youssef.kecheima.topchat_v12.Search.SearchFriendsActivity;
 import youssef.kecheima.topchat_v12.Settings.FriendProfileActivity;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> {

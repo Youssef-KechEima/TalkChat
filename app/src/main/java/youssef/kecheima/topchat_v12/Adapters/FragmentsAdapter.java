@@ -5,7 +5,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
-
 import youssef.kecheima.topchat_v12.Fragments.CallFragment;
 import youssef.kecheima.topchat_v12.Fragments.ChatFragment;
 import youssef.kecheima.topchat_v12.Fragments.RequestFragment;

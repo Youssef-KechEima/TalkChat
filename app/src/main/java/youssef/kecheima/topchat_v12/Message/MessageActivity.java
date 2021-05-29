@@ -222,19 +222,33 @@ public class MessageActivity extends AppCompatActivity {
         hashMap.put("time",time);
         databaseReference.child("Chats").push().setValue(hashMap);
 
-        //add ChatList Receiver
-        Map<String,String> inboxReceiver= new HashMap<>();
+        //Inbox fot both users
+        Map<String,Object> inboxReceiver= new HashMap<>();
         inboxReceiver.put("chat_id",receiver);
         inboxReceiver.put("message_type","received");
         DatabaseReference listref1=FirebaseDatabase.getInstance().getReference("Inbox").child(sender).child(receiver);
-        listref1.setValue(inboxReceiver);
+        if(receiver.equals(firebaseUser.getUid())) {
+            listref1.updateChildren(inboxReceiver);
+        }
+        else{
+            inboxReceiver.put("message_type","sent");
+            listref1.updateChildren(inboxReceiver);
+        }
 
-        //add ChatList Sender
-        Map<String,String> inboxSender = new HashMap<>();
+        Map<String,Object> inboxSender = new HashMap<>();
         inboxSender.put("chat_id",sender);
         inboxSender.put("message_type","sent");
         DatabaseReference listref2=FirebaseDatabase.getInstance().getReference("Inbox").child(receiver).child(sender);
-        listref2.setValue(inboxSender);
+        if(sender.equals(firebaseUser.getUid())){
+            listref2.updateChildren(inboxSender);
+        }
+        else{
+            inboxSender.put("message_type","received");
+            listref2.updateChildren(inboxSender);
+        }
+
+
+
 
 
         //send Notification

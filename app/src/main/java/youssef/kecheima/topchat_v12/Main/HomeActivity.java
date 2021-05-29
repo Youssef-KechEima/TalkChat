@@ -4,11 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
-
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -19,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -31,11 +27,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
-
 import java.util.HashMap;
-
 import youssef.kecheima.topchat_v12.Adapters.FragmentsAdapter;
 import youssef.kecheima.topchat_v12.Auth.LoginActivity;
 import youssef.kecheima.topchat_v12.R;
@@ -47,7 +40,7 @@ public class HomeActivity extends AppCompatActivity {
     private ViewPager2 viewPager2;
     private DatabaseReference statusRef;
     private FirebaseUser firebaseUser;
-    private BadgeDrawable badgeDrawable;
+    private BadgeDrawable badgeDrawable,badgeDrawable2;
 
 
     //Main Methode
@@ -80,9 +73,9 @@ public class HomeActivity extends AppCompatActivity {
                          break;
                      case 2:
                          tab.setIcon(R.drawable.request);
-                         badgeDrawable=tab.getOrCreateBadge();
-                         badgeDrawable.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.red));
-                         badgeDrawable.setVisible(false);
+                         badgeDrawable2=tab.getOrCreateBadge();
+                         badgeDrawable2.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.red));
+                         badgeDrawable2.setVisible(false);
                          break;
                      case 3:
                          tab.setIcon(R.drawable.phone);
@@ -99,11 +92,11 @@ public class HomeActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int requests=(int)snapshot.getChildrenCount();
                 if(requests==0){
-                    badgeDrawable.setVisible(false);
+                    badgeDrawable2.setVisible(false);
                 }
                 else {
-                    badgeDrawable.setVisible(true);
-                    badgeDrawable.setNumber(requests);
+                    badgeDrawable2.setVisible(true);
+                    badgeDrawable2.setNumber(requests);
                 }
             }
 
@@ -113,7 +106,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        Query query1 =FirebaseDatabase.getInstance().getReference("Inbox").child(firebaseUser.getUid()).orderByChild("message_type").equalTo("received");
+        Query query1 =FirebaseDatabase.getInstance().getReference("Inbox").child(firebaseUser.getUid()).orderByChild("message_type").equalTo("sent");
         query1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
