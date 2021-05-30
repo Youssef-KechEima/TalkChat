@@ -28,9 +28,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import youssef.kecheima.topchat_v12.Adapters.FragmentsAdapter;
 import youssef.kecheima.topchat_v12.Auth.LoginActivity;
+import youssef.kecheima.topchat_v12.Model.ChatList;
 import youssef.kecheima.topchat_v12.R;
 import youssef.kecheima.topchat_v12.Settings.SettingsActivity;
 
@@ -41,6 +44,7 @@ public class HomeActivity extends AppCompatActivity {
     private DatabaseReference statusRef;
     private FirebaseUser firebaseUser;
     private BadgeDrawable badgeDrawable,badgeDrawable2;
+    private List<ChatList> chatLists;
 
 
     //Main Methode
@@ -51,6 +55,7 @@ public class HomeActivity extends AppCompatActivity {
         components();
         statusBar_and_actionBar_Tool();
 
+        chatLists = new ArrayList<>();
         statusRef= FirebaseDatabase.getInstance().getReference("UserStatus");
         firebaseUser=FirebaseAuth.getInstance().getCurrentUser();
         FirebaseMessaging.getInstance().subscribeToTopic(firebaseUser.getUid());
@@ -106,15 +111,15 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        Query query1 =FirebaseDatabase.getInstance().getReference("Inbox").child(firebaseUser.getUid()).orderByChild("message_type").equalTo("received");
-        query1.addValueEventListener(new ValueEventListener() {
+        Query query1=FirebaseDatabase.getInstance().getReference("Inbox").child(firebaseUser.getUid()).orderByChild("message_type").equalTo("received");
+      query1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int inbox=(int)snapshot.getChildrenCount();
                 if(inbox==0){
                     badgeDrawable.setVisible(false);
                 }
-                else {
+                else{
                     badgeDrawable.setVisible(true);
                     badgeDrawable.setNumber(inbox);
                 }

@@ -223,39 +223,21 @@ public class MessageActivity extends AppCompatActivity {
         databaseReference.child("Chats").push().setValue(hashMap);
 
         //Inbox fot both users
-        Map<String,Object> inboxReceiver= new HashMap<>();
+        Map<String,Object> inboxReceiver = new HashMap<>();
         inboxReceiver.put("chat_id",receiver);
-        inboxReceiver.put("message_type","received");
         DatabaseReference listref1=FirebaseDatabase.getInstance().getReference("Inbox").child(sender).child(receiver);
-        if(receiver.equals(firebaseUser.getUid())) {
-            listref1.updateChildren(inboxReceiver);
-        }
-        else{
-            inboxReceiver.put("message_type","sent");
-            listref1.updateChildren(inboxReceiver);
-        }
+        listref1.setValue(inboxReceiver);
+
+
 
         Map<String,Object> inboxSender = new HashMap<>();
         inboxSender.put("chat_id",sender);
-        inboxSender.put("message_type","sent");
         DatabaseReference listref2=FirebaseDatabase.getInstance().getReference("Inbox").child(receiver).child(sender);
-        if(sender.equals(firebaseUser.getUid())){
-            listref2.updateChildren(inboxSender);
-        }
-        else{
-            inboxSender.put("message_type","received");
-            listref2.updateChildren(inboxSender);
-        }
-
-
-
+        listref2.setValue(inboxSender);
 
 
         //send Notification
-
         sendNotification(receiver,Message);
-
-
     }
 
     private void sendNotification(String receiver, String message) {
