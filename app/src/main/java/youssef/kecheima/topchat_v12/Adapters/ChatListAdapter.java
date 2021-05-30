@@ -9,9 +9,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.google.android.material.badge.BadgeDrawable;
+
 import java.util.HashMap;
 import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
+import youssef.kecheima.topchat_v12.Main.HomeActivity;
 import youssef.kecheima.topchat_v12.Message.MessageActivity;
 import youssef.kecheima.topchat_v12.Model.User;
 import youssef.kecheima.topchat_v12.R;
@@ -20,6 +23,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
     private List<User> userList;
    private Context context;
     private HashMap<String,String>lastMessageMap;
+    private BadgeDrawable badgeDrawable;
 
     public ChatListAdapter(List<User> userList, Context context) {
         this.userList = userList;
@@ -60,6 +64,9 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
             public void onClick(View v) {
                 context.startActivity(new Intent(context, MessageActivity.class)
                         .putExtra("newUserId",hisUid));
+                badgeDrawable=HomeActivity.getBadge();
+                badgeDrawable.setNumber(0);
+                badgeDrawable.setVisible(false);
             }
         });
     }

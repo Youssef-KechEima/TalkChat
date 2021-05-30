@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
@@ -226,14 +227,54 @@ public class MessageActivity extends AppCompatActivity {
         Map<String,Object> inboxReceiver = new HashMap<>();
         inboxReceiver.put("chat_id",receiver);
         DatabaseReference listref1=FirebaseDatabase.getInstance().getReference("Inbox").child(sender).child(receiver);
-        listref1.setValue(inboxReceiver);
+        listref1.child("chat_id").setValue(receiver);
+        listref1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Map<String,Object> map = new HashMap<>();
+                Map<String,Object> map2 = new HashMap<>();
+                if(snapshot.child("chat_id").getValue().equals(firebaseUser.getUid())){
+                    map.put("message_type","sent");
+                    listref1.updateChildren(map);
+                }
+                else{
+                    map2.put("message_type","received");
+                    listref1.updateChildren(map2);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
 
 
         Map<String,Object> inboxSender = new HashMap<>();
         inboxSender.put("chat_id",sender);
         DatabaseReference listref2=FirebaseDatabase.getInstance().getReference("Inbox").child(receiver).child(sender);
-        listref2.setValue(inboxSender);
+        listref2.child("chat_id").setValue(sender);
+        listref2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Map<String,Object> map = new HashMap<>();
+                Map<String,Object> map2 = new HashMap<>();
+                if(snapshot.child("chat_id").getValue().equals(firebaseUser.getUid())){
+                    map.put("message_type","sent");
+                    listref2.updateChildren(map);
+                }
+                else{
+                    map2.put("message_type","received");
+                    listref2.updateChildren(map2);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
 
         //send Notification

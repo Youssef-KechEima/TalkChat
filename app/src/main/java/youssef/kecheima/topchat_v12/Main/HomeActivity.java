@@ -28,12 +28,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import youssef.kecheima.topchat_v12.Adapters.FragmentsAdapter;
 import youssef.kecheima.topchat_v12.Auth.LoginActivity;
-import youssef.kecheima.topchat_v12.Model.ChatList;
 import youssef.kecheima.topchat_v12.R;
 import youssef.kecheima.topchat_v12.Settings.SettingsActivity;
 
@@ -43,8 +40,8 @@ public class HomeActivity extends AppCompatActivity {
     private ViewPager2 viewPager2;
     private DatabaseReference statusRef;
     private FirebaseUser firebaseUser;
-    private BadgeDrawable badgeDrawable,badgeDrawable2;
-    private List<ChatList> chatLists;
+    private static BadgeDrawable badgeDrawable;
+    private BadgeDrawable badgeDrawable2;
 
 
     //Main Methode
@@ -55,7 +52,6 @@ public class HomeActivity extends AppCompatActivity {
         components();
         statusBar_and_actionBar_Tool();
 
-        chatLists = new ArrayList<>();
         statusRef= FirebaseDatabase.getInstance().getReference("UserStatus");
         firebaseUser=FirebaseAuth.getInstance().getCurrentUser();
         FirebaseMessaging.getInstance().subscribeToTopic(firebaseUser.getUid());
@@ -111,7 +107,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        Query query1=FirebaseDatabase.getInstance().getReference("Inbox").child(firebaseUser.getUid()).orderByChild("message_type").equalTo("received");
+        Query query1=FirebaseDatabase.getInstance().getReference("Inbox").child(firebaseUser.getUid()).orderByChild("message_type").equalTo("sent");
       query1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -152,6 +148,10 @@ public class HomeActivity extends AppCompatActivity {
           }
       });
 
+    }
+
+    public static BadgeDrawable getBadge(){
+        return badgeDrawable;
     }
 
     private void checkOnlineStatus(String status){
