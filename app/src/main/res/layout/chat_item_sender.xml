@@ -22,7 +22,7 @@
             android:text="Whats up"
             android:textSize="18dp"
             android:textColor="@color/white"
-            android:padding="8dp"
+            android:padding="10dp"
             android:layout_alignParentRight="true" />
         <TextView
             android:id="@+id/TimeMessage"
@@ -34,10 +34,21 @@
             android:background="@drawable/background_item_sender"
             android:text="11:50"
             android:textSize="8dp"
-            android:layout_alignBottom="@+id/show_Message"
             android:textColor="@color/white"
             android:padding="8dp"
             android:layout_alignParentRight="true" />
+        <TextView
+            android:id="@+id/is_Seen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:layout_alignBottom="@+id/show_Message"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/background_item_sender"
+            android:layout_alignParentRight="true"
+            android:textSize="8dp"
+            android:paddingLeft="2dp"
+            android:padding="8dp"/>
     </RelativeLayout>
 
 </RelativeLayout>

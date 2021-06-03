@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +28,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import java.util.ArrayList;
 import java.util.List;
 import youssef.kecheima.topchat_v12.Adapters.ChatListAdapter;
+import youssef.kecheima.topchat_v12.Model.AESUtils;
 import youssef.kecheima.topchat_v12.Model.Chat;
 import youssef.kecheima.topchat_v12.Model.ChatList;
 import youssef.kecheima.topchat_v12.Model.User;
@@ -51,10 +54,8 @@ public class ChatFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
-
         //Cast Components
         recyclerView = view.findViewById(R.id.RecyclerChatContact);
-
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         //FireBase Instances
@@ -62,8 +63,8 @@ public class ChatFragment extends Fragment {
 
         chatLists=new ArrayList<>();
 
-        FirebaseMessaging.getInstance().subscribeToTopic(firebaseUser.getUid());
 
+        FirebaseMessaging.getInstance().subscribeToTopic(firebaseUser.getUid());
 
         databaseReference = FirebaseDatabase.getInstance().getReference("Inbox").child(firebaseUser.getUid());
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -84,7 +85,6 @@ public class ChatFragment extends Fragment {
         });
         return view;
     }
-
 
     private void loadChats() {
         userList = new ArrayList<>();
@@ -129,7 +129,7 @@ public class ChatFragment extends Fragment {
                     if(receiver.equals(firebaseUser.getUid()) && sender.equals(userId) ||
                         receiver.equals(userId) && sender.equals(firebaseUser.getUid()))
                     {
-                        Lastmessage=chat.getMessage();
+                        Lastmessage= chat.getMessage();
                     }
                 }
                 chatListAdapter.setLastMessageMap(userId,Lastmessage);

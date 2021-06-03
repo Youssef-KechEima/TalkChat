@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
@@ -34,6 +35,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -41,6 +43,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -60,7 +63,10 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import youssef.kecheima.topchat_v12.Adapters.MessageAdapter;
+import youssef.kecheima.topchat_v12.Fragments.ChatFragment;
 import youssef.kecheima.topchat_v12.Fragments.RequestFragment;
+import youssef.kecheima.topchat_v12.Main.HomeActivity;
+import youssef.kecheima.topchat_v12.Model.AESUtils;
 import youssef.kecheima.topchat_v12.Model.Chat;
 import youssef.kecheima.topchat_v12.Model.User;
 import youssef.kecheima.topchat_v12.R;
@@ -74,13 +80,15 @@ public class MessageActivity extends AppCompatActivity {
     private FloatingActionButton sendBtn;
     private EditText messageText;
     private FirebaseFirestore firebaseFirestore;
-    private DatabaseReference reference,statusRef;
+    private DatabaseReference reference,statusRef,inboxRef;
     private MessageAdapter messageAdapter;
     private List<Chat> chatList;
     private RecyclerView messageRecycler;
     private String baseUrl="https://fcm.googleapis.com/fcm/send";
     private RequestQueue requestQueue;
     private LinearLayout userBar;
+    private BadgeDrawable badgeDrawable;
+    private ValueEventListener valueEventListener;
 
 
     //Main Methode
@@ -198,6 +206,10 @@ public class MessageActivity extends AppCompatActivity {
                 startActivity(intent1);
             }
         });
+
+
+        seenMessage(newUserId);
+
     }
 
     //Mehhode to verify the messge then send it
@@ -212,69 +224,49 @@ public class MessageActivity extends AppCompatActivity {
             Toast.makeText(this, "You can't send a empty message", Toast.LENGTH_SHORT).show();
     }
 
+
+    //seenMessage
+    private void seenMessage(String userId){
+       reference=FirebaseDatabase.getInstance().getReference();
+        valueEventListener=reference.child("Chats").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot data:snapshot.getChildren()){
+                    Chat chat=data.getValue(Chat.class);
+                    if(chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userId)){
+                        HashMap<String,Object> hashMap2 = new HashMap<>();
+                        hashMap2.put("is_seen",true);
+                        data.getRef().updateChildren(hashMap2);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
     //Send Message
     private void sendMessage(String sender ,String receiver,String Message,String time){
         //addMessage
-        DatabaseReference databaseReference =FirebaseDatabase.getInstance().getReference();
         HashMap<String,Object> hashMap = new HashMap<>();
         hashMap.put("sender",sender);
         hashMap.put("receiver",receiver);
+        hashMap.put("is_seen",false);
         hashMap.put("message",Message);
         hashMap.put("time",time);
-        databaseReference.child("Chats").push().setValue(hashMap);
+        DatabaseReference databaseReference =FirebaseDatabase.getInstance().getReference("Chats").push();
+        databaseReference.setValue(hashMap);
 
         //Inbox fot both users
-        Map<String,Object> inboxReceiver = new HashMap<>();
-        inboxReceiver.put("chat_id",receiver);
         DatabaseReference listref1=FirebaseDatabase.getInstance().getReference("Inbox").child(sender).child(receiver);
         listref1.child("chat_id").setValue(receiver);
-        listref1.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Map<String,Object> map = new HashMap<>();
-                Map<String,Object> map2 = new HashMap<>();
-                if(snapshot.child("chat_id").getValue().equals(firebaseUser.getUid())){
-                    map.put("message_type","sent");
-                    listref1.updateChildren(map);
-                }
-                else{
-                    map2.put("message_type","received");
-                    listref1.updateChildren(map2);
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-
-
-        Map<String,Object> inboxSender = new HashMap<>();
-        inboxSender.put("chat_id",sender);
         DatabaseReference listref2=FirebaseDatabase.getInstance().getReference("Inbox").child(receiver).child(sender);
         listref2.child("chat_id").setValue(sender);
-        listref2.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Map<String,Object> map = new HashMap<>();
-                Map<String,Object> map2 = new HashMap<>();
-                if(snapshot.child("chat_id").getValue().equals(firebaseUser.getUid())){
-                    map.put("message_type","sent");
-                    listref2.updateChildren(map);
-                }
-                else{
-                    map2.put("message_type","received");
-                    listref2.updateChildren(map2);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
 
 
         //send Notification
@@ -327,32 +319,6 @@ public class MessageActivity extends AppCompatActivity {
         });
     }
 
-    private void checkOnlineStatus(String status){
-        HashMap<String,Object> hashMap =new HashMap<>();
-        hashMap.put("status",status);
-        statusRef.child(firebaseUser.getUid()).updateChildren(hashMap);
-
-    }
-
-    @Override
-    protected void onStart() {
-        checkOnlineStatus("online");
-        super.onStart();
-    }
-
-    @Override
-    protected void onPause() {
-        String timestamp= String.valueOf(System.currentTimeMillis());
-        checkOnlineStatus(timestamp);
-        super.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        checkOnlineStatus("online");
-        super.onResume();
-    }
-
     //Read Message
     private void readMessage(String myId,String userId,String imageUrl){
         chatList=new ArrayList<>();
@@ -378,6 +344,34 @@ public class MessageActivity extends AppCompatActivity {
 
                 }
             });
+    }
+
+
+    private void checkOnlineStatus(String status){
+        HashMap<String,Object> hashMap =new HashMap<>();
+        hashMap.put("status",status);
+        statusRef.child(firebaseUser.getUid()).updateChildren(hashMap);
+
+    }
+
+    @Override
+    protected void onStart() {
+        checkOnlineStatus("online");
+        super.onStart();
+    }
+
+    @Override
+    protected void onPause() {
+        String timestamp= String.valueOf(System.currentTimeMillis());
+        checkOnlineStatus(timestamp);
+        reference.removeEventListener(valueEventListener);
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        checkOnlineStatus("online");
+        super.onResume();
     }
 
 

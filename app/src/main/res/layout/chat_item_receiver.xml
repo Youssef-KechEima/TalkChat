@@ -38,6 +38,16 @@
         android:textSize="8dp"
         android:padding="8dp"
         android:layout_alignParentRight="true"/>
+        <TextView
+            android:id="@+id/is_Seen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="11:50"
+            android:textSize="8dp"
+            android:padding="8dp"
+            android:visibility="gone"
+            android:layout_alignParentRight="true"/>
     </LinearLayout>
 
 </RelativeLayout>

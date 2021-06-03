@@ -31,6 +31,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import java.util.HashMap;
 import youssef.kecheima.topchat_v12.Adapters.FragmentsAdapter;
 import youssef.kecheima.topchat_v12.Auth.LoginActivity;
+import youssef.kecheima.topchat_v12.Fragments.ChatFragment;
 import youssef.kecheima.topchat_v12.R;
 import youssef.kecheima.topchat_v12.Settings.SettingsActivity;
 
@@ -107,18 +108,19 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        Query query1=FirebaseDatabase.getInstance().getReference("Inbox").child(firebaseUser.getUid()).orderByChild("message_type").equalTo("sent");
-      query1.addValueEventListener(new ValueEventListener() {
+        /*Query query1 =FirebaseDatabase.getInstance().getReference("Inbox").child(firebaseUser.getUid());
+        query1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                int inbox=(int)snapshot.getChildrenCount();
-                if(inbox==0){
-                    badgeDrawable.setVisible(false);
+                int inbox =(int)snapshot.getChildrenCount();
+                if(inbox==0 ){
+                        badgeDrawable.setVisible(false);
                 }
-                else{
+                else {
                     badgeDrawable.setVisible(true);
                     badgeDrawable.setNumber(inbox);
                 }
+
             }
 
             @Override
@@ -126,7 +128,6 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
-
 
       tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
           @Override
@@ -146,7 +147,7 @@ public class HomeActivity extends AppCompatActivity {
           public void onTabReselected(TabLayout.Tab tab) {
 
           }
-      });
+      });*/
 
     }
 
