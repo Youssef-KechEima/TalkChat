@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,6 +33,8 @@ import java.util.HashMap;
 import youssef.kecheima.topchat_v12.Adapters.FragmentsAdapter;
 import youssef.kecheima.topchat_v12.Auth.LoginActivity;
 import youssef.kecheima.topchat_v12.Fragments.ChatFragment;
+import youssef.kecheima.topchat_v12.Model.Chat;
+import youssef.kecheima.topchat_v12.Model.ChatList;
 import youssef.kecheima.topchat_v12.R;
 import youssef.kecheima.topchat_v12.Settings.SettingsActivity;
 
@@ -108,19 +111,27 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        /*Query query1 =FirebaseDatabase.getInstance().getReference("Inbox").child(firebaseUser.getUid());
+         Query query1 =FirebaseDatabase.getInstance().getReference("Chats");
         query1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                int inbox =(int)snapshot.getChildrenCount();
-                if(inbox==0 ){
+                int unread=1;
+                for(DataSnapshot data:snapshot.getChildren()) {
+                    Log.d("inbox", "Data : " + data);
+                    Chat chat=data.getValue(Chat.class);
+                    if(chat.getReceiver().equals(firebaseUser.getUid()) && !chat.isIs_seen()){
+                        badgeDrawable.setNumber(unread++);
+                        badgeDrawable.setVisible(true);
+                    }
+                    else{
+                        badgeDrawable.setNumber(0);
                         badgeDrawable.setVisible(false);
+                    }
                 }
-                else {
-                    badgeDrawable.setVisible(true);
-                    badgeDrawable.setNumber(inbox);
+                if(unread==0){
+                    badgeDrawable.setVisible(false);
+                    badgeDrawable.setNumber(0);
                 }
-
             }
 
             @Override
@@ -128,6 +139,7 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
+
 
       tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
           @Override
@@ -147,7 +159,7 @@ public class HomeActivity extends AppCompatActivity {
           public void onTabReselected(TabLayout.Tab tab) {
 
           }
-      });*/
+      });
 
     }
 

@@ -17,6 +17,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -62,12 +63,14 @@ import java.util.Locale;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import youssef.kecheima.topchat_v12.Adapters.ChatListAdapter;
 import youssef.kecheima.topchat_v12.Adapters.MessageAdapter;
 import youssef.kecheima.topchat_v12.Fragments.ChatFragment;
 import youssef.kecheima.topchat_v12.Fragments.RequestFragment;
 import youssef.kecheima.topchat_v12.Main.HomeActivity;
 import youssef.kecheima.topchat_v12.Model.AESUtils;
 import youssef.kecheima.topchat_v12.Model.Chat;
+import youssef.kecheima.topchat_v12.Model.ChatList;
 import youssef.kecheima.topchat_v12.Model.User;
 import youssef.kecheima.topchat_v12.R;
 import youssef.kecheima.topchat_v12.Settings.FriendProfileActivity;
@@ -89,7 +92,6 @@ public class MessageActivity extends AppCompatActivity {
     private LinearLayout userBar;
     private BadgeDrawable badgeDrawable;
     private ValueEventListener valueEventListener;
-
 
     //Main Methode
     @Override
@@ -261,6 +263,9 @@ public class MessageActivity extends AppCompatActivity {
         DatabaseReference databaseReference =FirebaseDatabase.getInstance().getReference("Chats").push();
         databaseReference.setValue(hashMap);
 
+
+
+
         //Inbox fot both users
         DatabaseReference listref1=FirebaseDatabase.getInstance().getReference("Inbox").child(sender).child(receiver);
         listref1.child("chat_id").setValue(receiver);
@@ -269,9 +274,11 @@ public class MessageActivity extends AppCompatActivity {
         listref2.child("chat_id").setValue(sender);
 
 
+
         //send Notification
         sendNotification(receiver,Message);
     }
+
 
     private void sendNotification(String receiver, String message) {
         firebaseFirestore.collection("Users").document(firebaseUser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
