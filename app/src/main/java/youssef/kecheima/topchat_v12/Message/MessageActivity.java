@@ -3,6 +3,7 @@ package youssef.kecheima.topchat_v12.Message;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -23,6 +24,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -90,8 +92,10 @@ public class MessageActivity extends AppCompatActivity {
     private String baseUrl="https://fcm.googleapis.com/fcm/send";
     private RequestQueue requestQueue;
     private LinearLayout userBar;
-    private BadgeDrawable badgeDrawable;
     private ValueEventListener valueEventListener;
+    private CardView layoutActions;
+    private ImageView fileAtach;
+    private boolean isActionShow=false;
 
     //Main Methode
     @Override
@@ -206,6 +210,20 @@ public class MessageActivity extends AppCompatActivity {
                 Intent intent1 = new Intent(MessageActivity.this, FriendProfileActivity.class);
                 intent1.putExtra("newUserId",newUserId);
                 startActivity(intent1);
+            }
+        });
+
+        fileAtach.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isActionShow) {
+                    layoutActions.setVisibility(View.GONE);
+                    isActionShow=false;
+                }
+                else {
+                    layoutActions.setVisibility(View.VISIBLE);
+                    isActionShow=true;
+                }
             }
         });
 
@@ -392,6 +410,8 @@ public class MessageActivity extends AppCompatActivity {
         messageRecycler=findViewById(R.id.MessageRecycler);
         status=findViewById(R.id.MessageLastSeen);
         userBar=findViewById(R.id.Userbar);
+        fileAtach=findViewById(R.id.btn_fileAttach);
+        layoutActions=findViewById(R.id.layout_actions);
     }
 
     //StatusBar and ActionBar

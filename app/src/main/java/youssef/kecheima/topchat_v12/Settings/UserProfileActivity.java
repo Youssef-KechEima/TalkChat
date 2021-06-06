@@ -4,19 +4,25 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -43,10 +49,16 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import youssef.kecheima.topchat_v12.BuildConfig;
 import youssef.kecheima.topchat_v12.Model.Common;
 import youssef.kecheima.topchat_v12.R;
 
@@ -241,7 +253,7 @@ public class UserProfileActivity extends AppCompatActivity {
         ((View) view.findViewById(R.id.Camera)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(UserProfileActivity.this, "Camera", Toast.LENGTH_SHORT).show();
+                checkCameraPermission();
                 bottomSheetDialog.dismiss();
 
             }
@@ -260,6 +272,34 @@ public class UserProfileActivity extends AppCompatActivity {
         bottomSheetDialog.show();
     }
 
+    private void checkCameraPermission() {
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)!= PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.CAMERA},221);
+        }
+        else if(ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},222);
+        }
+        else{
+            openCamera();
+        }
+    }
+
+    private void openCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        String timeStamp=new SimpleDateFormat("yyyyMMDD_HHmmss", Locale.getDefault()).format(new Date());
+        String imageFileName="IMG_"+timeStamp+".jpg";
+        try {
+            File file =File.createTempFile("IMG_"+timeStamp,".jpg",getExternalFilesDir(Environment.DIRECTORY_PICTURES));
+            imageUri= FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID+".provider",file);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
+            intent.putExtra("listPhotoName",imageFileName);
+            startActivityForResult(intent,440);
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
     private void openGallery() {
         Intent intent =new Intent();
         intent.setType("image/*");
@@ -274,7 +314,18 @@ public class UserProfileActivity extends AppCompatActivity {
             imageUri=data.getData();
             UploadToFireBase();
             try {
-                Bitmap bitmap= MediaStore.Images.Media.getBitmap(getContentResolver(),imageUri);
+                Bitmap bitmap =MediaStore.Images.Media.getBitmap(getContentResolver(),imageUri);
+                UserImage.setImageBitmap(bitmap);
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        if(requestCode==440 && resultCode==RESULT_OK){
+            UploadToFireBase();
+            try {
+                Bitmap bitmap =MediaStore.Images.Media.getBitmap(getContentResolver(),imageUri);
                 UserImage.setImageBitmap(bitmap);
             }
             catch (Exception e){
