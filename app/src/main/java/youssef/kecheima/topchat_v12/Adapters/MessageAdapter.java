@@ -22,10 +22,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
     private Context context;
     private String imageUrl;
    private FirebaseUser firebaseUser;
-    public MessageAdapter(List<Chat> chatList, Context context, String imageUrl) {
+    public MessageAdapter(List<Chat> chatList, Context context) {
         this.chatList = chatList;
         this.context = context;
-        this.imageUrl = imageUrl;
+    }
+
+
+    public void setChatList(List<Chat> chatList){
+        this.chatList=chatList;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -47,12 +52,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
         Chat chat = chatList.get(position);
         holder.show_Message.setText(chat.getMessage());
         holder.timeChat.setText(chat.getTime());
-        if(imageUrl.equals("default")){
-            holder.profileImage.setImageResource(R.drawable.empty_user);
-        }
-        else{
-            Glide.with(context).load(imageUrl).into(holder.profileImage);
-        }
         if(position==chatList.size()-1){
             if(chat.isIs_seen()){
                 holder.is_seen.setText("Seen");
@@ -73,12 +72,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView show_Message, timeChat,is_seen;
-        CircleImageView profileImage;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             timeChat=itemView.findViewById(R.id.TimeMessage);
             show_Message=itemView.findViewById(R.id.show_Message);
-            profileImage=itemView.findViewById(R.id.ProfileImage);
             is_seen=itemView.findViewById(R.id.is_Seen);
         }
     }

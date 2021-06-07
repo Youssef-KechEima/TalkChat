@@ -93,6 +93,10 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
                         holder.txt_badgeNotification.setVisibility(View.VISIBLE);
                         holder.txt_badgeNotification.setText(String.valueOf(unread++));
                     }
+                    else{
+                        holder.txt_badgeNotification.setText(String.valueOf(0));
+                        holder.txt_badgeNotification.setVisibility(View.GONE);
+                    }
                 }
                 if(unread==0){
                     holder.txt_badgeNotification.setText(String.valueOf(0));
