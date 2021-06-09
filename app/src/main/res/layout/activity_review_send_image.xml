@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:orientation="vertical"
+    tools:context=".Message.ReviewSendImageActivity">
+    <com.jsibbold.zoomage.ZoomageView
+        android:id="@+id/ImageViewSendImage"
+        android:transitionName="image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/empty_user"
+        android:scaleType="fitCenter"/>
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/BarSendImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#92000000">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <ImageButton
+                android:id="@+id/Back_Arrow"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/white_back_arrow"
+                android:background="@android:color/transparent" />!
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Send Images"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_marginStart="15dp"
+                android:layout_marginLeft="15dp"
+                />
+        </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/send_Images"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/send"
+        android:layout_margin="15dp"
+        app:backgroundTint="@color/purple_500"
+        app:tint="@color/white" />
+</RelativeLayout>

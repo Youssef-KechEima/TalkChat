@@ -1,6 +1,7 @@
 package youssef.kecheima.topchat_v12.Message;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -9,9 +10,13 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -36,10 +41,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -47,9 +51,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import youssef.kecheima.topchat_v12.Adapters.MessageAdapter;
 import youssef.kecheima.topchat_v12.Interfaces.OnReadChatCallBack;
 import youssef.kecheima.topchat_v12.Managers.ChatService;
+import youssef.kecheima.topchat_v12.Managers.DialogReviewSendImage;
 import youssef.kecheima.topchat_v12.Model.Chat;
 import youssef.kecheima.topchat_v12.Model.User;
 import youssef.kecheima.topchat_v12.R;
+import youssef.kecheima.topchat_v12.Services.FirebaseServices;
 import youssef.kecheima.topchat_v12.Settings.FriendProfileActivity;
 
 public class MessageActivity extends AppCompatActivity {
@@ -64,13 +70,16 @@ public class MessageActivity extends AppCompatActivity {
     private List<Chat> chatList;
     private MessageAdapter messageAdapter;
     private RecyclerView messageRecycler;
-    private LinearLayout userBar;
+    private LinearLayout userBar,btnGalery;
     private ValueEventListener valueEventListener;
     private CardView layoutActions;
     private ImageView fileAtach;
     private boolean isActionShow=false;
     private ChatService chatService;
     private String newUserId;
+    private int IMAGE_GALLERY_REQUEST=111;
+    private Uri imageUri;
+    private ProgressDialog progressDialog;
 
     //Main Methode
     @Override
@@ -212,7 +221,19 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
 
+        btnGalery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openGallery();
+            }
+        });
+    }
 
+    private void openGallery() {
+        Intent intent =new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent,"select image"),IMAGE_GALLERY_REQUEST);
     }
 
     private void readMessage() {
@@ -232,11 +253,8 @@ public class MessageActivity extends AppCompatActivity {
     //Mehhode to verify the messge then send it
     private void initBtnClick(){
         String msg=messageText.getText().toString();
-        Date c = Calendar.getInstance().getTime();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
-        String time = simpleDateFormat.format(c);
             if(!TextUtils.isEmpty(msg))
-                chatService.sendTextMsg(firebaseUser.getUid(), newUserId, msg, time);;
+                chatService.sendTextMsg(msg);
     }
 
 
@@ -304,6 +322,7 @@ public class MessageActivity extends AppCompatActivity {
         userBar=findViewById(R.id.Userbar);
         fileAtach=findViewById(R.id.btn_fileAttach);
         layoutActions=findViewById(R.id.layout_actions);
+        btnGalery=findViewById(R.id.btn_Galery);
     }
 
     //StatusBar and ActionBar
@@ -313,5 +332,47 @@ public class MessageActivity extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.setStatusBarColor(ContextCompat.getColor(MessageActivity.this,R.color.purple_700));
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == IMAGE_GALLERY_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData();
+            //UploadToFireBase();
+            try {
+                Bitmap bitmap =MediaStore.Images.Media.getBitmap(getContentResolver(),imageUri);
+                reviewImage(bitmap);
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+    private void reviewImage(Bitmap bitmap){
+        new DialogReviewSendImage(MessageActivity.this,bitmap).show(new DialogReviewSendImage.OnCallBack() {
+            @Override
+            public void OnButtonSendClick() {
+                if (imageUri!=null) {
+                    progressDialog = new ProgressDialog(MessageActivity.this);
+                    progressDialog.show();
+                    progressDialog.setContentView(R.layout.progress_dialog);
+                    progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                    new FirebaseServices(MessageActivity.this).UploadImagetoFirebaseStorage(imageUri, new FirebaseServices.OnCallBack() {
+                        @Override
+                        public void OnUploadSuccess(String imagesUrl) {
+                            chatService.sendImage(imagesUrl);
+                            progressDialog.dismiss();
+                        }
+
+                        @Override
+                        public void OnUploadFailed(Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+                }
+            }
+        });
     }
 }
