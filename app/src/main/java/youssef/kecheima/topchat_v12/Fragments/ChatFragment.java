@@ -129,11 +129,13 @@ public class ChatFragment extends Fragment {
                     if(receiver.equals(firebaseUser.getUid()) && sender.equals(userId) ||
                         receiver.equals(userId) && sender.equals(firebaseUser.getUid()))
                     {
-                        if (chat.getMessage_type().equals("TEXT")) {
-                            Lastmessage = chat.getMessage();
-                        }
-                        else {
-                            Lastmessage="Photo";
+                        switch (chat.getMessage_type()){
+                            case "TEXT":
+                                Lastmessage=chat.getMessage();
+                                break;
+                            case "IMAGE":
+                                Lastmessage="Photo";
+                                break;
                         }
                     }
                 }

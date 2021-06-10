@@ -1,17 +1,17 @@
 package youssef.kecheima.topchat_v12.Model;
 
 public class Chat {
-    private String sender,receiver,message,image_Url,message_type,time;
+    private String sender,receiver,message,images_Url,message_type,time;
     private boolean is_seen;
 
     public Chat() {
     }
 
-    public Chat(String sender, String receiver, String message, String image_Url, String message_type, String time, boolean is_seen) {
+    public Chat(String sender, String receiver, String message, String images_Url, String message_type, String time, boolean is_seen) {
         this.sender = sender;
         this.receiver = receiver;
         this.message = message;
-        this.image_Url = image_Url;
+        this.images_Url = images_Url;
         this.message_type = message_type;
         this.time = time;
         this.is_seen = is_seen;
@@ -41,12 +41,12 @@ public class Chat {
         this.message = message;
     }
 
-    public String getImage_Url() {
-        return image_Url;
+    public String getImages_Url() {
+        return images_Url;
     }
 
-    public void setImage_Url(String image_Url) {
-        this.image_Url = image_Url;
+    public void setImages_Url(String images_Url) {
+        this.images_Url = images_Url;
     }
 
     public String getMessage_type() {

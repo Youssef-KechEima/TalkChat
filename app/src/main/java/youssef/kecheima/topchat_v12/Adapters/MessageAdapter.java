@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,7 +22,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
     public static int MSG_TYPE_SENDER = 1;
     private List<Chat> chatList;
     private Context context;
-    private String imageUrl;
    private FirebaseUser firebaseUser;
     public MessageAdapter(List<Chat> chatList, Context context) {
         this.chatList = chatList;
@@ -50,18 +51,37 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
     @Override
     public void onBindViewHolder(@NonNull MessageAdapter.MyViewHolder holder, int position) {
         Chat chat = chatList.get(position);
-        holder.show_Message.setText(chat.getMessage());
-        holder.timeChat.setText(chat.getTime());
-        if(position==chatList.size()-1){
-            if(chat.isIs_seen()){
-                holder.is_seen.setText("Seen");
-            }
-            else{
-                holder.is_seen.setText("Delivered");
-            }
-        }
-        else {
-            holder.is_seen.setVisibility(View.GONE);
+        switch (chat.getMessage_type()) {
+            case "TEXT":
+                holder.relative_Image.setVisibility(View.GONE);
+                holder.relative_Text.setVisibility(View.VISIBLE);
+                holder.show_Message.setText(chat.getMessage());
+                holder.timeChat.setText(chat.getTime());
+                if (position == chatList.size() - 1) {
+                    if (chat.isIs_seen()) {
+                        holder.is_seen.setText("Seen");
+                    } else {
+                        holder.is_seen.setText("Delivered");
+                    }
+                } else {
+                    holder.is_seen.setVisibility(View.GONE);
+                }
+                break;
+            case "IMAGE":
+                holder.relative_Text.setVisibility(View.GONE);
+                holder.relative_Image.setVisibility(View.VISIBLE);
+                Glide.with(context).load(chat.getImages_Url()).into(holder.show_image);
+                holder.timeImage.setText(chat.getTime());
+                if (position == chatList.size() - 1) {
+                    if (chat.isIs_seen()) {
+                        holder.Is_seenImage.setText("Seen");
+                    } else {
+                        holder.Is_seenImage.setText("Delivered");
+                    }
+                } else {
+                    holder.Is_seenImage.setVisibility(View.GONE);
+                }
+                break;
         }
     }
 
@@ -71,12 +91,19 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView show_Message, timeChat,is_seen;
+        TextView show_Message, timeChat,is_seen,timeImage,Is_seenImage;
+        ImageView show_image;
+        RelativeLayout relative_Text,relative_Image;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             timeChat=itemView.findViewById(R.id.TimeMessage);
             show_Message=itemView.findViewById(R.id.show_Message);
             is_seen=itemView.findViewById(R.id.is_Seen);
+            show_image=itemView.findViewById(R.id.Show_Image);
+            timeImage=itemView.findViewById(R.id.TimeImage);
+            Is_seenImage=itemView.findViewById(R.id.is_SeenImage);
+            relative_Text=itemView.findViewById(R.id.RelativeText);
+            relative_Image=itemView.findViewById(R.id.RelativeImage);
         }
     }
 

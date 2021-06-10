@@ -364,6 +364,7 @@ public class MessageActivity extends AppCompatActivity {
                         public void OnUploadSuccess(String imagesUrl) {
                             chatService.sendImage(imagesUrl);
                             progressDialog.dismiss();
+                            layoutActions.setVisibility(View.GONE);
                         }
 
                         @Override
