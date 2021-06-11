@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/my_logo_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TopChat_v12">
-        <activity android:name=".Message.ReviewSendImageActivity"></activity>
+        <activity android:name=".Message.ReviewChatImagesActivity"></activity>
+        <activity android:name=".Message.ReviewSendImageActivity" />
         <activity android:name=".Search.SearchFriendsActivity" />
         <activity android:name=".Settings.FriendProfileActivity" />
         <activity android:name=".Settings.DisplayPictureActivity" />

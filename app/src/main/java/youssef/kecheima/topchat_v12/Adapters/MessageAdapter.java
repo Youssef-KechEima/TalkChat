@@ -1,6 +1,10 @@
 package youssef.kecheima.topchat_v12.Adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,14 +12,19 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
+import youssef.kecheima.topchat_v12.Message.ReviewChatImagesActivity;
 import youssef.kecheima.topchat_v12.Model.Chat;
+import youssef.kecheima.topchat_v12.Model.Common;
 import youssef.kecheima.topchat_v12.R;
+import youssef.kecheima.topchat_v12.Settings.DisplayPictureActivity;
+import youssef.kecheima.topchat_v12.Settings.UserProfileActivity;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHolder> {
     public static int MSG_TYPE_RECEIVER = 0;
@@ -83,6 +92,18 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
                 }
                 break;
         }
+        holder.show_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.show_image.invalidate();
+                Drawable dr=holder.show_image.getDrawable();
+                Common.IMAGE_BITMAP=((BitmapDrawable)dr.getCurrent()).getBitmap();
+                ActivityOptionsCompat activityOptionsCompat=ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, holder.show_image,"imageView");
+                Intent intent =new Intent(context, ReviewChatImagesActivity.class);
+                intent.putExtra("Image_Url",chat.getImages_Url());
+                context.startActivity(intent,activityOptionsCompat.toBundle());
+            }
+        });
     }
 
     @Override

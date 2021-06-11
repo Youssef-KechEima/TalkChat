@@ -55,9 +55,11 @@
     <ImageView
         android:id="@+id/Show_Image"
         android:layout_width="190dp"
+        android:transitionName="imageView"
         android:layout_height="250dp"
         android:background="@drawable/background_item_receiver"
         android:src="@drawable/empty_user"
+        android:scaleType="fitCenter"
         />
     <LinearLayout
         android:layout_width="wrap_content"
