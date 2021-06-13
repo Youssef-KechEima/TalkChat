@@ -134,7 +134,10 @@ public class ChatFragment extends Fragment {
                                 Lastmessage=chat.getMessage();
                                 break;
                             case "IMAGE":
-                                Lastmessage="Photo";
+                                Lastmessage="Picture";
+                                break;
+                            case "FILE":
+                                Lastmessage="File";
                                 break;
                         }
                     }

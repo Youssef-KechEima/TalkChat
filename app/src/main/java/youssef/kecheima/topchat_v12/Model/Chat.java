@@ -1,17 +1,19 @@
 package youssef.kecheima.topchat_v12.Model;
 
 public class Chat {
-    private String sender,receiver,message,images_Url,message_type,time;
+    private String sender,receiver,message,images_Url,file_Url,file_type,message_type,time;
     private boolean is_seen;
 
     public Chat() {
     }
 
-    public Chat(String sender, String receiver, String message, String images_Url, String message_type, String time, boolean is_seen) {
+    public Chat(String sender, String receiver, String message, String images_Url, String file_Url, String file_type, String message_type, String time, boolean is_seen) {
         this.sender = sender;
         this.receiver = receiver;
         this.message = message;
         this.images_Url = images_Url;
+        this.file_Url = file_Url;
+        this.file_type = file_type;
         this.message_type = message_type;
         this.time = time;
         this.is_seen = is_seen;
@@ -47,6 +49,22 @@ public class Chat {
 
     public void setImages_Url(String images_Url) {
         this.images_Url = images_Url;
+    }
+
+    public String getFile_Url() {
+        return file_Url;
+    }
+
+    public void setFile_Url(String file_Url) {
+        this.file_Url = file_Url;
+    }
+
+    public String getFile_type() {
+        return file_type;
+    }
+
+    public void setFile_type(String file_type) {
+        this.file_type = file_type;
     }
 
     public String getMessage_type() {

@@ -97,6 +97,27 @@ public class ChatService {
       DatabaseReference listref2=FirebaseDatabase.getInstance().getReference("Inbox").child(userId).child(firebaseUser.getUid());
       listref2.child("chat_id").setValue(firebaseUser.getUid());
    }
+   public void sendFile(String fileUrl,String extension){
+      //addMessage
+      HashMap<String,Object> hashMap = new HashMap<>();
+      hashMap.put("sender",firebaseUser.getUid());
+      hashMap.put("receiver",userId);
+      hashMap.put("is_seen",false);
+      hashMap.put("message_type","FILE");
+      hashMap.put("file_type",extension);
+      hashMap.put("message","");
+      hashMap.put("file_Url",fileUrl);
+      hashMap.put("time",getCurrentDate());
+      DatabaseReference databaseReference =FirebaseDatabase.getInstance().getReference("Chats").push();
+      databaseReference.setValue(hashMap);
+
+      //Inbox fot both users
+      DatabaseReference listref1=FirebaseDatabase.getInstance().getReference("Inbox").child(firebaseUser.getUid()).child(userId);
+      listref1.child("chat_id").setValue(userId);
+
+      DatabaseReference listref2=FirebaseDatabase.getInstance().getReference("Inbox").child(userId).child(firebaseUser.getUid());
+      listref2.child("chat_id").setValue(firebaseUser.getUid());
+   }
    public String getCurrentDate(){
       Date c = Calendar.getInstance().getTime();
       SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.ENGLISH);

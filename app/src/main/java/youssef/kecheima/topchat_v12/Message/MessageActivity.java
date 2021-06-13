@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -25,13 +26,18 @@ import android.text.format.DateFormat;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -44,6 +50,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -65,6 +72,7 @@ import youssef.kecheima.topchat_v12.Model.User;
 import youssef.kecheima.topchat_v12.R;
 import youssef.kecheima.topchat_v12.Services.FirebaseServices;
 import youssef.kecheima.topchat_v12.Settings.FriendProfileActivity;
+import youssef.kecheima.topchat_v12.Settings.UserProfileActivity;
 
 public class MessageActivity extends AppCompatActivity {
     private CircleImageView userImage;
@@ -78,7 +86,7 @@ public class MessageActivity extends AppCompatActivity {
     private List<Chat> chatList;
     private MessageAdapter messageAdapter;
     private RecyclerView messageRecycler;
-    private LinearLayout userBar, btnGalery;
+    private LinearLayout userBar, btnGalery,btnDocuments;
     private ValueEventListener valueEventListener;
     private CardView layoutActions;
     private ImageView fileAtach;
@@ -86,10 +94,9 @@ public class MessageActivity extends AppCompatActivity {
     private ChatService chatService;
     private String newUserId;
     private int IMAGE_GALLERY_REQUEST = 111;
-    private Uri imageUri;
+    private int FILEPICKER_REQUEST = 112;
+    private Uri imageUri,file;
     private ProgressDialog progressDialog;
-    private FirebaseStorage firebaseStorage;
-    private StorageReference stReference;
 
     //Main Methode
     @Override
@@ -110,8 +117,6 @@ public class MessageActivity extends AppCompatActivity {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         firebaseFirestore = FirebaseFirestore.getInstance();
         statusRef = FirebaseDatabase.getInstance().getReference("UserStatus");
-        firebaseStorage = FirebaseStorage.getInstance();
-        stReference = firebaseStorage.getReference();
 
         chatList = new ArrayList<>();
         messageRecycler.setHasFixedSize(true);
@@ -236,6 +241,38 @@ public class MessageActivity extends AppCompatActivity {
                 openGallery();
             }
         });
+
+        btnDocuments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDocuments();
+            }
+        });
+    }
+
+    private void openDocuments() {
+        String[] mineTypes ={"application/pdf","application/zip","text/plain",
+                "application/vnd.ms-word","application/vnd.ms-powerpoint",
+                "application/vnd.ms-excel","application/vnd.openxmlformats-officedocument.wordprocessing.document",
+                "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"};
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT){
+            intent.setType(mineTypes.length==1 ? mineTypes[0] : "*/*");
+            if(mineTypes.length>0){
+                intent.putExtra(Intent.EXTRA_MIME_TYPES,mineTypes);
+            }
+        }
+        else{
+            String mineTypeStr="";
+            for(String minType : mineTypes){
+                mineTypeStr+=minType+ "|";
+            }
+            intent.setType(mineTypeStr.substring(0,mineTypeStr.length()-1));
+        }
+        startActivityForResult(Intent.createChooser(intent,"select file"),FILEPICKER_REQUEST);
     }
 
     private void openGallery() {
@@ -332,6 +369,7 @@ public class MessageActivity extends AppCompatActivity {
         fileAtach = findViewById(R.id.btn_fileAttach);
         layoutActions = findViewById(R.id.layout_actions);
         btnGalery = findViewById(R.id.btn_Galery);
+        btnDocuments=findViewById(R.id.btn_documents);
     }
 
     //StatusBar and ActionBar
@@ -355,6 +393,43 @@ public class MessageActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+        if(requestCode==FILEPICKER_REQUEST && resultCode==RESULT_OK && data !=null && data.getData()!=null){
+            file=data.getData();
+            UploadToFireBase();
+
+        }
+    }
+
+    private void UploadToFireBase() {
+        progressDialog= new ProgressDialog(MessageActivity.this);
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.progress_dialog);
+        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        StorageReference riverref= FirebaseStorage.getInstance().getReference().child("ChatFiles/"+firebaseUser.getUid()+"/"+System.currentTimeMillis()+"."+GetFileExtension(file));
+        riverref.putFile(file).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Task<Uri> urlTask=taskSnapshot.getStorage().getDownloadUrl();
+                while (!urlTask.isSuccessful());
+                Uri downlaodUri=urlTask.getResult();
+                final String sdownload=String.valueOf(downlaodUri);
+                chatService.sendFile(sdownload,GetFileExtension(file));
+                progressDialog.dismiss();
+                layoutActions.setVisibility(View.GONE);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                progressDialog.dismiss();
+                Toast.makeText(MessageActivity.this, "Upload Failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private String GetFileExtension(Uri uri){
+        ContentResolver contentResolver=this.getContentResolver();
+        MimeTypeMap mimeTypeMap =MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
     }
 
     private void reviewImage(Bitmap bitmap) {

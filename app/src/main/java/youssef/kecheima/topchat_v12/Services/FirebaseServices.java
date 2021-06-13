@@ -30,7 +30,7 @@ public class FirebaseServices {
     }
 
     public void UploadImagetoFirebaseStorage(Uri uri,OnCallBack onCallBack){
-        StorageReference riverref= FirebaseStorage.getInstance().getReference().child("sentImages/"+firebaseUser.getUid()+"/"+System.currentTimeMillis()+"."+GetFileExtension(uri));
+        StorageReference riverref= FirebaseStorage.getInstance().getReference().child("ChatFiles/"+firebaseUser.getUid()+"/"+System.currentTimeMillis()+"."+GetFileExtension(uri));
         riverref.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {

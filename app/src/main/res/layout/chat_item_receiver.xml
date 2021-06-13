@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="8dp"
     android:layout_height="wrap_content">
     <RelativeLayout
@@ -90,5 +91,62 @@
             android:visibility="gone"
             android:layout_alignParentRight="true"/>
     </LinearLayout>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/RelativeFile"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/RelativeImage"
+        android:visibility="visible"
+        >
+        <TextView
+            android:id="@+id/Show_TextFile"
+            android:layout_width="190dp"
+            android:layout_height="130dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/background_item_receiver"
+            android:textSize="18dp"
+            android:padding="10dp"
+            />
+        <ImageView
+            android:id="@+id/ImageFile"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="138dp"
+            android:layout_marginTop="10dp"
+            />
+        <ImageButton
+            android:id="@+id/downloadFile"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/download"
+            android:background="@android:color/transparent"
+            app:tint="@color/black"
+            android:layout_below="@id/ImageFile"
+            android:layout_marginLeft="70dp"/>
+        <TextView
+            android:id="@+id/TimeFile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="2dp"
+            android:background="@drawable/background_item_receiver"
+            android:text="11:50"
+            android:textSize="8dp"
+            android:layout_below="@+id/ImageFile"
+            android:textColor="@color/black"
+            android:padding="8dp"
+            android:layout_marginLeft="10dp"/>
+        <TextView
+            android:id="@+id/is_SeenFile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:layout_marginRight="10dp"
+            android:layout_below="@id/TimeFile"
+            android:background="@drawable/background_item_receiver"
+            android:textSize="8dp"
+            android:paddingLeft="2dp"
+            android:padding="8dp"
+            android:layout_marginLeft="10dp"/>
     </RelativeLayout>
 </RelativeLayout>

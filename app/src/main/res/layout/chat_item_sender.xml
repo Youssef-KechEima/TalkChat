@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:padding="8dp"
     android:layout_height="wrap_content">
@@ -53,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:visibility="visible">
+        android:visibility="gone">
         <ImageView
             android:id="@+id/Show_Image"
             android:layout_width="190dp"
@@ -91,5 +92,69 @@
             android:paddingLeft="2dp"
             android:padding="8dp"/>
     </RelativeLayout>
-
+    <RelativeLayout
+        android:id="@+id/RelativeFile"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/RelativeImage"
+        android:layout_alignParentRight="true"
+        android:visibility="visible">
+        <TextView
+            android:id="@+id/Show_TextFile"
+            android:layout_width="190dp"
+            android:layout_height="130dp"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/background_item_sender"
+            android:textSize="18dp"
+            android:textColor="@color/white"
+            android:padding="10dp"
+            android:layout_alignParentRight="true"
+            />
+        <ImageView
+            android:id="@+id/ImageFile"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"/>
+        <ImageButton
+            android:id="@+id/downloadFile"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/download"
+            android:background="@android:color/transparent"
+            app:tint="@color/black"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/ImageFile"
+            android:layout_marginRight="80dp"/>
+        <TextView
+            android:id="@+id/TimeFile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:paddingLeft="2dp"
+            android:background="@drawable/background_item_sender"
+            android:text="11:50"
+            android:textSize="8dp"
+            android:layout_below="@+id/ImageFile"
+            android:textColor="@color/white"
+            android:padding="8dp"
+            android:layout_alignParentRight="true" />
+        <TextView
+            android:id="@+id/is_SeenFile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:layout_marginRight="10dp"
+            android:layout_below="@id/TimeFile"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/background_item_sender"
+            android:layout_alignParentRight="true"
+            android:textSize="8dp"
+            android:paddingLeft="2dp"
+            android:padding="8dp"/>
+    </RelativeLayout>
 </RelativeLayout>
