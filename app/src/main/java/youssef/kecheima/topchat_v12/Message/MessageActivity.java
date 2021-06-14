@@ -5,24 +5,30 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -33,8 +39,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
+import com.devlomi.record_view.OnBasketAnimationEnd;
+import com.devlomi.record_view.OnRecordListener;
+import com.devlomi.record_view.RecordButton;
+import com.devlomi.record_view.RecordView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -51,30 +60,28 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import de.hdodenhof.circleimageview.CircleImageView;
 import youssef.kecheima.topchat_v12.Adapters.MessageAdapter;
 import youssef.kecheima.topchat_v12.Interfaces.OnReadChatCallBack;
-import youssef.kecheima.topchat_v12.Managers.ChatService;
+import youssef.kecheima.topchat_v12.Services.ChatService;
 import youssef.kecheima.topchat_v12.Managers.DialogReviewSendImage;
 import youssef.kecheima.topchat_v12.Model.Chat;
 import youssef.kecheima.topchat_v12.Model.User;
 import youssef.kecheima.topchat_v12.R;
 import youssef.kecheima.topchat_v12.Services.FirebaseServices;
 import youssef.kecheima.topchat_v12.Settings.FriendProfileActivity;
-import youssef.kecheima.topchat_v12.Settings.UserProfileActivity;
 
 public class MessageActivity extends AppCompatActivity {
+    private static final int REQUEST_CORD_PERMISSION = 332;
     private CircleImageView userImage;
     private TextView userName, status;
     private ImageButton backArraw;
@@ -89,7 +96,7 @@ public class MessageActivity extends AppCompatActivity {
     private LinearLayout userBar, btnGalery,btnDocuments;
     private ValueEventListener valueEventListener;
     private CardView layoutActions;
-    private ImageView fileAtach;
+    private ImageView fileAtach,camera,emoji;
     private boolean isActionShow = false;
     private ChatService chatService;
     private String newUserId;
@@ -97,6 +104,12 @@ public class MessageActivity extends AppCompatActivity {
     private int FILEPICKER_REQUEST = 112;
     private Uri imageUri,file;
     private ProgressDialog progressDialog;
+    private RecordView recordView;
+    private RecordButton recordButton;
+    //Audio
+    private MediaRecorder mediaRecorder;
+    private String audio_path;
+    private String sTime;
 
     //Main Methode
     @Override
@@ -134,6 +147,7 @@ public class MessageActivity extends AppCompatActivity {
 
     }
 
+    //everyThing
     private void initialisation() {
 
         chatService = new ChatService(this, newUserId);
@@ -149,9 +163,11 @@ public class MessageActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (TextUtils.isEmpty(messageText.getText().toString())) {
-                    sendBtn.setImageDrawable(getDrawable(R.drawable.voice));
+                    sendBtn.setVisibility(View.INVISIBLE);
+                    recordButton.setVisibility(View.VISIBLE);
                 } else {
-                    sendBtn.setImageDrawable(getDrawable(R.drawable.send));
+                    sendBtn.setVisibility(View.VISIBLE);
+                    recordButton.setVisibility(View.INVISIBLE);
                 }
 
             }
@@ -248,8 +264,80 @@ public class MessageActivity extends AppCompatActivity {
                 openDocuments();
             }
         });
+
+        recordButton.setRecordView(recordView);
+        recordView.setOnRecordListener(new OnRecordListener() {
+            @Override
+            public void onStart() {
+                if(!checkPermission()){
+                    fileAtach.setVisibility(View.INVISIBLE);
+                    emoji.setVisibility(View.INVISIBLE);
+                    camera.setVisibility(View.INVISIBLE);
+                    messageText.setVisibility(View.INVISIBLE);
+
+                    startRecording();
+                    Vibrator vibrator =(Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
+                    vibrator.vibrate(100);
+                }
+                else{
+                    RequestPermission();
+                }
+            }
+
+            @Override
+            public void onCancel(){
+                try {
+                    mediaRecorder.reset();
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFinish(long recordTime) {
+                fileAtach.setVisibility(View.VISIBLE);
+                emoji.setVisibility(View.VISIBLE);
+                camera.setVisibility(View.VISIBLE);
+                messageText.setVisibility(View.VISIBLE);
+
+                try {
+                    sTime=getHumanTimetext(recordTime);
+                    stopRecord();
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onLessThanSecond() {
+                fileAtach.setVisibility(View.VISIBLE);
+                emoji.setVisibility(View.VISIBLE);
+                camera.setVisibility(View.VISIBLE);
+                messageText.setVisibility(View.VISIBLE);
+            }
+        });
+
+        recordView.setOnBasketAnimationEndListener(new OnBasketAnimationEnd() {
+            @Override
+            public void onAnimationEnd() {
+                fileAtach.setVisibility(View.VISIBLE);
+                emoji.setVisibility(View.VISIBLE);
+                camera.setVisibility(View.VISIBLE);
+                messageText.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
+    @SuppressLint("DefaultLocale")
+    private String getHumanTimetext(long recordTime) {
+        return String.format("%02d",
+                TimeUnit.MILLISECONDS.toSeconds(recordTime)-
+                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toSeconds(recordTime)));
+    }
+
+    //open Files
     private void openDocuments() {
         String[] mineTypes ={"application/pdf","application/zip","text/plain",
                 "application/vnd.ms-word","application/vnd.ms-powerpoint",
@@ -275,6 +363,7 @@ public class MessageActivity extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent,"select file"),FILEPICKER_REQUEST);
     }
 
+    //open Image Gallery
     private void openGallery() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -282,6 +371,7 @@ public class MessageActivity extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent, "select image"), IMAGE_GALLERY_REQUEST);
     }
 
+    //read Message
     private void readMessage() {
         chatService.readChatData(new OnReadChatCallBack() {
             @Override
@@ -304,7 +394,7 @@ public class MessageActivity extends AppCompatActivity {
     }
 
 
-    //seenMessage
+    //seen Message
     private void seenMessage(String userId) {
         reference = FirebaseDatabase.getInstance().getReference();
         valueEventListener = reference.child("Chats").addValueEventListener(new ValueEventListener() {
@@ -328,19 +418,18 @@ public class MessageActivity extends AppCompatActivity {
 
     }
 
+    //Check if User is Online
     private void checkOnlineStatus(String status) {
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("status", status);
         statusRef.child(firebaseUser.getUid()).updateChildren(hashMap);
 
     }
-
     @Override
     protected void onStart() {
         checkOnlineStatus("online");
         super.onStart();
     }
-
     @Override
     protected void onPause() {
         String timestamp = String.valueOf(System.currentTimeMillis());
@@ -348,7 +437,6 @@ public class MessageActivity extends AppCompatActivity {
         reference.removeEventListener(valueEventListener);
         super.onPause();
     }
-
     @Override
     protected void onResume() {
         checkOnlineStatus("online");
@@ -370,6 +458,10 @@ public class MessageActivity extends AppCompatActivity {
         layoutActions = findViewById(R.id.layout_actions);
         btnGalery = findViewById(R.id.btn_Galery);
         btnDocuments=findViewById(R.id.btn_documents);
+        recordView=findViewById(R.id.RecordAudio);
+        recordButton=findViewById(R.id.RecordButton);
+        camera=findViewById(R.id.take_photo);
+        emoji=findViewById(R.id.btn_emoji);
     }
 
     //StatusBar and ActionBar
@@ -381,6 +473,7 @@ public class MessageActivity extends AppCompatActivity {
         window.setStatusBarColor(ContextCompat.getColor(MessageActivity.this, R.color.purple_700));
     }
 
+    //get Images and files
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -400,12 +493,13 @@ public class MessageActivity extends AppCompatActivity {
         }
     }
 
+    //Upload File to Firebase Storage
     private void UploadToFireBase() {
         progressDialog= new ProgressDialog(MessageActivity.this);
         progressDialog.show();
         progressDialog.setContentView(R.layout.progress_dialog);
         progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        StorageReference riverref= FirebaseStorage.getInstance().getReference().child("ChatFiles/"+firebaseUser.getUid()+"/"+System.currentTimeMillis()+"."+GetFileExtension(file));
+        StorageReference riverref= FirebaseStorage.getInstance().getReference().child("Chats/Files/"+firebaseUser.getUid()+"/"+System.currentTimeMillis()+"."+GetFileExtension(file));
         riverref.putFile(file).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -426,12 +520,14 @@ public class MessageActivity extends AppCompatActivity {
         });
     }
 
+    //get file Extension
     private String GetFileExtension(Uri uri){
         ContentResolver contentResolver=this.getContentResolver();
         MimeTypeMap mimeTypeMap =MimeTypeMap.getSingleton();
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
     }
 
+    //review Image then Send it
     private void reviewImage(Bitmap bitmap) {
         new DialogReviewSendImage(MessageActivity.this, bitmap).show(new DialogReviewSendImage.OnCallBack() {
             @Override
@@ -457,5 +553,72 @@ public class MessageActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    //check Permission
+    private boolean checkPermission(){
+        int write_external_storage_result = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int record_audio_result = ContextCompat.checkSelfPermission(this,Manifest.permission.RECORD_AUDIO);
+        return write_external_storage_result== PackageManager.PERMISSION_DENIED || record_audio_result==PackageManager.PERMISSION_DENIED;
+    }
+
+    //Request Permission
+    private void RequestPermission(){
+        ActivityCompat.requestPermissions(this,new String[]{
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.RECORD_AUDIO
+        },REQUEST_CORD_PERMISSION);
+    }
+
+    //save the Recording
+    private void setUpMedaiRecorder() {
+        String path_save = Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+ UUID.randomUUID().toString()+"_audio_record.m4a";
+        audio_path=path_save;
+
+        mediaRecorder=new MediaRecorder();
+        try {
+            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+            mediaRecorder.setOutputFile(path_save);
+        }
+        catch (Exception e){
+            Log.d("TAG","setUpMedaiRecorder: "+e.getMessage());
+        }
+    }
+
+    //Start Recording
+    private void startRecording(){
+        setUpMedaiRecorder();
+
+        try {
+            mediaRecorder.prepare();
+            mediaRecorder.start();
+        }
+        catch (IOException e){
+            e.printStackTrace();
+            Log.d("Error", "startRecording: "+e.getMessage());
+            Toast.makeText(this, "Recording Error , please restart your app", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    //Stop Recording
+    private void stopRecord(){
+        try {
+            if(mediaRecorder!=null){
+                mediaRecorder.stop();
+                mediaRecorder.reset();
+                mediaRecorder.release();
+                mediaRecorder=null;
+                chatService.uploadVoice(audio_path);
+                new File(audio_path).delete();
+            }
+            else {
+                Toast.makeText(this, "Null", Toast.LENGTH_SHORT).show();
+            }
+        }
+        catch (Exception e){
+            Toast.makeText(this, "stop Recoding Error : "+e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 }

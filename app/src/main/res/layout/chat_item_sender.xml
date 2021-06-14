@@ -9,7 +9,8 @@
         android:layout_width="300dp"
         android:layout_alignParentEnd="true"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true">
+        android:layout_alignParentRight="true"
+        android:visibility="gone">
         <TextView
             android:id="@+id/show_Message"
             android:layout_width="190dp"
@@ -99,7 +100,7 @@
         android:layout_alignParentEnd="true"
         android:layout_below="@id/RelativeImage"
         android:layout_alignParentRight="true"
-        android:visibility="visible">
+        android:visibility="gone">
         <TextView
             android:id="@+id/Show_TextFile"
             android:layout_width="190dp"
@@ -157,4 +158,75 @@
             android:paddingLeft="2dp"
             android:padding="8dp"/>
     </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/LinearRelativeAudioVoice"
+        android:layout_width="290dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/bg_layout_round_sender"
+        android:visibility="visible"
+        android:layout_alignParentRight="true"
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="-3dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="-3dp"
+            android:layout_marginLeft="5dp">
+            <ImageButton
+                android:id="@+id/AudioVoice_play"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/play_arrow"
+                app:tint="@color/purple_500"
+                android:clickable="false"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:visibility="visible"/>
+        </RelativeLayout>
+        <View
+            android:id="@+id/AudioVoice_length"
+            android:layout_width="150dp"
+            android:layout_height="1dp"
+            android:layout_gravity="center_vertical"
+            android:background="@color/white"/>
+        <Chronometer
+            android:id="@+id/AudioVoice_Duration"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:visibility="gone"
+            android:text="01:00"
+            android:textColor="@android:color/white"/>
+        <TextView
+            android:id="@+id/TimeAudioVoice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="2dp"
+            android:background="@drawable/background_item_sender"
+            android:text="11:50"
+            android:textSize="8dp"
+            android:textColor="@android:color/white"
+            android:padding="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="10dp"/>
+
+        <TextView
+            android:id="@+id/is_SeenAudioVoice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/background_item_sender"
+            android:padding="8dp"
+            android:layout_marginTop="8dp"
+            android:paddingLeft="2dp"
+            android:textColor="@color/white"
+            android:textSize="8dp" />
+    </LinearLayout>
 </RelativeLayout>

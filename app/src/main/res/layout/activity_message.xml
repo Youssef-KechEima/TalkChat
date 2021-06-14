@@ -177,6 +177,7 @@
     </androidx.cardview.widget.CardView>
     <LinearLayout
         android:id="@+id/MessageInput"
+        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -243,15 +244,50 @@
             </androidx.cardview.widget.CardView>
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/send_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/voice"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:src="@drawable/send"
                 android:layout_margin="5dp"
+                android:visibility="invisible"
                 android:background="@color/purple_500"
                 android:backgroundTint="@color/purple_500"
                 app:tint="@color/white"
                 tools:ignore="ContentDescription,UnusedAttribute" />
         </LinearLayout>
     </LinearLayout>
+
+    <com.devlomi.record_view.RecordView
+        android:id="@+id/RecordAudio"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@id/RecordButton"
+        android:layout_toLeftOf="@id/RecordButton"
+        app:slide_to_cancel_arrow="@drawable/recv_ic_arrow"
+        app:slide_to_cancel_arrow_color="@color/black"
+        app:slide_to_cancel_bounds="6dp"
+        android:visibility="visible"
+        app:slide_to_cancel_margin_right="5dp"
+        app:slide_to_cancel_text="Slide to Cancel"
+        app:counter_time_color="#ff0000"/>
+    <com.devlomi.record_view.RecordButton
+        android:id="@+id/RecordButton"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_margin="6dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/myrecv_bg_mic"
+        android:scaleType="centerInside"
+        android:visibility="visible"
+        android:tint="@color/white"
+        android:padding="17dp"
+        app:mic_icon="@drawable/recv_ic_mic"/>
 
 </RelativeLayout>
