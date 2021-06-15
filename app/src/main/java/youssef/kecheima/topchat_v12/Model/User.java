@@ -1,7 +1,7 @@
 package youssef.kecheima.topchat_v12.Model;
 
 public class User {
-    private String id, user_name, imageUrl, email, sexe, desc;
+    private String id, user_name, imageUrl, email,sexe, desc;
 
     public User() {
     }
@@ -46,6 +46,7 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
 
     public String getSexe() {
         return sexe;

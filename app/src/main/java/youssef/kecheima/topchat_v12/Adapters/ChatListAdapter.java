@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import youssef.kecheima.topchat_v12.Main.HomeActivity;
+import youssef.kecheima.topchat_v12.Managers.DialogViewUser;
 import youssef.kecheima.topchat_v12.Message.MessageActivity;
 import youssef.kecheima.topchat_v12.Model.Chat;
 import youssef.kecheima.topchat_v12.Model.User;
@@ -49,6 +50,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        User user=userList.get(position);
         String hisUid=userList.get(position).getId();
         String image=userList.get(position).getImageUrl();
         String userName=userList.get(position).getUser_name();
@@ -106,6 +108,13 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.MyView
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+
+        holder.userImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DialogViewUser(context,user);
             }
         });
     }

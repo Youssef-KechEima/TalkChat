@@ -139,6 +139,8 @@ public class ChatFragment extends Fragment {
                             case "FILE":
                                 Lastmessage="File";
                                 break;
+                            case "AUDIO_VOICE":
+                                Lastmessage="Message Audio";
                         }
                     }
                 }

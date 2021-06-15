@@ -38,4 +38,5 @@
     <string name="Decline_Request">Decline Request</string>
     <string name="Desc">Description</string>
     <string name="About">About</string>
+    <string name="Phone_Number">Phone Number</string>
 </resources>

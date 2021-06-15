@@ -1,6 +1,7 @@
 package youssef.kecheima.topchat_v12.Services;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import androidx.annotation.NonNull;
@@ -25,8 +26,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+
+import youssef.kecheima.topchat_v12.Auth.RegesterActivity;
 import youssef.kecheima.topchat_v12.Interfaces.OnReadChatCallBack;
 import youssef.kecheima.topchat_v12.Model.Chat;
+import youssef.kecheima.topchat_v12.R;
 
 
 public class ChatService {
@@ -35,6 +39,7 @@ public class ChatService {
    private FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
    private String userId;
    private Task<Uri> urlUri;
+   private ProgressDialog progressDialog;
 
 
    public ChatService(Context context, String userId) {
@@ -131,6 +136,10 @@ public class ChatService {
       listref2.child("chat_id").setValue(firebaseUser.getUid());
    }
    public void uploadVoice(String audioPath){
+      progressDialog= new ProgressDialog(context);
+      progressDialog.show();
+      progressDialog.setContentView(R.layout.progress_dialog);
+      progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
       final Uri uriAudio =Uri.fromFile(new File(audioPath));
       final StorageReference audioRef = FirebaseStorage.getInstance().getReference().child("Chats/VoicesAudio/"+firebaseUser.getUid()+"/"+System.currentTimeMillis());
        urlUri= audioRef.putFile(uriAudio).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
@@ -148,6 +157,7 @@ public class ChatService {
                Uri downloadUrl=task.getResult();
                String VoiceUrl=String.valueOf(downloadUrl);
                sendAudio(VoiceUrl);
+               progressDialog.dismiss();
             }
          }
       });
