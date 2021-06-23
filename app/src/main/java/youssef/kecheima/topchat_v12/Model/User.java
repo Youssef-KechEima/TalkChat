@@ -47,7 +47,6 @@ public class User {
         this.email = email;
     }
 
-
     public String getSexe() {
         return sexe;
     }

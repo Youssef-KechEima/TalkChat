@@ -39,4 +39,6 @@
     <string name="Desc">Description</string>
     <string name="About">About</string>
     <string name="Phone_Number">Phone Number</string>
+    <string name="Verification_Code">Verification Code</string>
+    <string name="Verify">Verify</string>
 </resources>
