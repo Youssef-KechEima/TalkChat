@@ -21,6 +21,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import youssef.kecheima.topchat_v12.Main.HomeActivity;
 import youssef.kecheima.topchat_v12.R;
 
@@ -66,10 +68,15 @@ public class LoginActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if(task.isSuccessful()){
                                         progressDialog.dismiss();
-                                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        startActivity(intent);
-                                        finish();
+                                        if(firebaseAuth.getCurrentUser().isEmailVerified()) {
+                                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                        else {
+                                            Toast.makeText(LoginActivity.this, "pllz verify your email to log in to your Account", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
                                     else{
                                         progressDialog.dismiss();

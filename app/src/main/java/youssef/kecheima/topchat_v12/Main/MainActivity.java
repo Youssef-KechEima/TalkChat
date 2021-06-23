@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     protected int SPLASH_SCREEN=3000;
     protected boolean _active=true;
     private FirebaseUser firebaseUser;
+    private FirebaseAuth firebaseAuth;
 
 
     //Main Methode
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         statusBar_and_actionBar_Tool();
         firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
+        firebaseAuth=FirebaseAuth.getInstance();
 
 
         Thread splashThread = new Thread() {
@@ -45,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } finally {
-                    if(firebaseUser!=null){
+                    if(firebaseUser!=null && firebaseAuth.getCurrentUser().isEmailVerified()){
                         Intent intent = new Intent(MainActivity.this,HomeActivity.class);
                         startActivity(intent);
                         finish();

@@ -120,9 +120,17 @@ public class RegesterActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 progressDialog.dismiss();
-								startActivity(new Intent(RegesterActivity.this, HomeActivity.class));
-								finish();
-                                
+                                firebaseAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful()){
+                                           finish();
+                                        }
+                                        else {
+                                            Toast.makeText(RegesterActivity.this, (CharSequence) task.getException(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
                             }
                         });
                     }
