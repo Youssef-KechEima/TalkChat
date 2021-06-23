@@ -2,6 +2,7 @@
     <string name="app_name">TalkChat</string>
     <string name="Image">Chat_logo</string>
     <string name="Email">Email</string>
+    <string name="Email_2">Enter your Email</string>
     <string name="Password">Password</string>
     <string name="log_in">Log In</string>
     <string name="forget_password">Forget Password</string>
@@ -9,7 +10,6 @@
     <string name="terme_and_conditions">By clicking on Regester Button you Accept <a href="https://www.termsandconditionsgenerator.com/live.php?token=nZKHnMQjQDIXqqr641oIBrB0EDT8iQW5">the terme and the Conditions</a></string>
     <string name="fist_name">Fist Name</string>
     <string name="last_name">Last Name</string>
-    <string name="birthday">BirthDay</string>
     <string name="regester">Regester</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -38,7 +38,6 @@
     <string name="Decline_Request">Decline Request</string>
     <string name="Desc">Description</string>
     <string name="About">About</string>
-    <string name="Phone_Number">Phone Number</string>
-    <string name="Verification_Code">Verification Code</string>
     <string name="Verify">Verify</string>
+    <string name="reset_password">Reset Password</string>
 </resources>
