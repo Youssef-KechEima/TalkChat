@@ -52,7 +52,7 @@ public class FriendProfileActivity extends AppCompatActivity {
     private Button sentFirstMessage;
     private ImageButton friendProfileback;
     private FrameLayout sendandCancalandAccept,declineRequuest;
-    private String Current_state,saveCurrentDate;
+    private String Current_state;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

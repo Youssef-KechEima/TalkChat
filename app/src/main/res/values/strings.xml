@@ -40,4 +40,8 @@
     <string name="About">About</string>
     <string name="Verify">Verify</string>
     <string name="reset_password">Reset Password</string>
+    <string name="ChangePassword">Change the Password</string>
+    <string name="Modify_email_address">Modify Email Address</string>
+    <string name="new_email">Enter a new Email Address</string>
+    <string name="Update_email">Update your Email</string>
 </resources>

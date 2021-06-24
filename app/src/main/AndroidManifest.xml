@@ -18,11 +18,13 @@
         android:roundIcon="@mipmap/my_logo_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TopChat_v12">
-        <activity android:name=".Auth.ForgetPasswordActivity"
+        <activity android:name=".Settings.ChangeEmailActivity"></activity>
+        <activity android:name=".Settings.AccountActivity" />
+        <activity
+            android:name=".Auth.ForgetPasswordActivity"
             android:label="@string/reset_password"
             android:screenOrientation="portrait"
-            android:theme="@style/ActionBar">
-        </activity>
+            android:theme="@style/ActionBar" />
         <activity android:name=".Message.ReviewChatImagesActivity" />
         <activity android:name=".Message.ReviewSendImageActivity" />
         <activity android:name=".Search.SearchFriendsActivity" />
