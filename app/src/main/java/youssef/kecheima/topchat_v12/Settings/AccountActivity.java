@@ -32,7 +32,7 @@ public class AccountActivity extends AppCompatActivity {
         userChangePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(AccountActivity.this,ChangePasswordActivity.class));
             }
         });
 

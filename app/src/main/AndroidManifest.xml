@@ -18,7 +18,8 @@
         android:roundIcon="@mipmap/my_logo_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TopChat_v12">
-        <activity android:name=".Settings.ChangeEmailActivity"></activity>
+        <activity android:name=".Settings.ChangePasswordActivity"></activity>
+        <activity android:name=".Settings.ChangeEmailActivity" />
         <activity android:name=".Settings.AccountActivity" />
         <activity
             android:name=".Auth.ForgetPasswordActivity"

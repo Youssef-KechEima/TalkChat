@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -23,11 +25,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 import youssef.kecheima.topchat_v12.R;
+import youssef.kecheima.topchat_v12.Settings.UserProfileActivity;
 
 public class ForgetPasswordActivity extends AppCompatActivity {
     private EditText resetPasswordEmail;
     private Button resetPasswordButton;
     private FirebaseAuth firebaseAuth;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +43,8 @@ public class ForgetPasswordActivity extends AppCompatActivity {
         resetPasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                InputMethodManager inputMethodManager=(InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(v.getApplicationWindowToken(),0);
                 resetPassword();
             }
         });
@@ -56,13 +62,19 @@ public class ForgetPasswordActivity extends AppCompatActivity {
             resetPasswordEmail.requestFocus();
             return;
         }
+        progressDialog= new ProgressDialog(ForgetPasswordActivity.this);
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.progress_dialog);
+        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         firebaseAuth.sendPasswordResetEmail(mail).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
+                    progressDialog.dismiss();
                     Toast.makeText(ForgetPasswordActivity.this, "Check your Email to reset your password", Toast.LENGTH_SHORT).show();
                 }
                 else {
+                    progressDialog.dismiss();
                     Toast.makeText(ForgetPasswordActivity.this, (CharSequence) task.getException(), Toast.LENGTH_SHORT).show();
                 }
             }

@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -37,6 +39,7 @@ public class ChangeEmailActivity extends AppCompatActivity {
     private AuthCredential authCredential;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,8 @@ public class ChangeEmailActivity extends AppCompatActivity {
         updateEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                InputMethodManager inputMethodManager=(InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(v.getApplicationWindowToken(),0);
                 updateUserEmail();
             }
         });
@@ -65,6 +70,7 @@ public class ChangeEmailActivity extends AppCompatActivity {
         String pass=passwordForEmail.getText().toString().trim();
         if(mail.isEmpty() || pass.isEmpty()) {
             newEmail.setError("email is required !");
+            passwordForEmail.setError("Password is required");
             newEmail.requestFocus();
             return;
         }
@@ -73,6 +79,10 @@ public class ChangeEmailActivity extends AppCompatActivity {
             newEmail.requestFocus();
             return;
         }
+        progressDialog= new ProgressDialog(ChangeEmailActivity.this);
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.progress_dialog);
+        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         authCredential= EmailAuthProvider
                 .getCredential(firebaseUser.getEmail(),pass);
 
@@ -87,6 +97,7 @@ public class ChangeEmailActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()){
+                                        progressDialog.dismiss();
                                         Toast.makeText(ChangeEmailActivity.this, "You email has been Updated pllz verify Your Email", Toast.LENGTH_SHORT).show();
                                         firebaseFirestore.collection("Users").document(firebaseUser.getUid()).update("email",mail);
                                         firebaseAuth.signOut();
@@ -94,10 +105,14 @@ public class ChangeEmailActivity extends AppCompatActivity {
                                         finish();
                                     }
                                     else {
+                                        progressDialog.dismiss();
                                         Toast.makeText(ChangeEmailActivity.this, (CharSequence) task.getException(), Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
+                        }
+                        else {
+                            Toast.makeText(ChangeEmailActivity.this, "Email is incorrect", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

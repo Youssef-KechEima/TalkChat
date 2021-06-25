@@ -44,4 +44,6 @@
     <string name="Modify_email_address">Modify Email Address</string>
     <string name="new_email">Enter a new Email Address</string>
     <string name="Update_email">Update your Email</string>
+    <string name="new_Password">Enter the New Password</string>
+    <string name="Update_Password">Update Password</string>
 </resources>
