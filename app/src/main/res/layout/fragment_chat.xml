@@ -11,12 +11,13 @@
         android:id="@+id/RecyclerChatContact"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-   <!-- <LinearLayout
-        android:id="@+id/add"
+    <LinearLayout
+        android:id="@+id/addChats"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="200dp"
+        android:visibility="gone"
         android:orientation="vertical">
         <TextView
             android:layout_width="wrap_content"
@@ -30,6 +31,53 @@
             android:gravity="center"
             android:text="Add friends and family to \n begin the chat"
             android:textSize="20sp"/>
-    </LinearLayout>!-->
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/Connection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="200dp"
+        android:visibility="gone"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Please connect to Wifi or Mobile Data"
+            android:textSize="25sp"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:gravity="center_horizontal" />
+        <ImageButton
+            android:id="@+id/Refrech"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/refresh"
+            android:background="@android:color/transparent"
+            android:layout_marginTop="20dp"
+            app:tint="@color/purple_500" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/ProgressBarChat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginTop="300dp"
+        android:indeterminateTint="@color/purple_500"
+        android:indeterminateTintMode="src_in"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/AddFriends"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/chat"
+        android:layout_alignBottom="@+id/RecyclerChatContact"
+        android:layout_marginBottom="30dp"
+        android:layout_marginStart="300dp"
+        app:tint="@color/white"
+        android:background="@color/purple_500"
+        app:backgroundTint="@color/purple_500"
+        android:layout_marginLeft="320dp" />
 
 </RelativeLayout>

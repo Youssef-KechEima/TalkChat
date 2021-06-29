@@ -13,7 +13,8 @@
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:progressDrawable="@color/purple_500"/>
+            android:indeterminateTint="@color/purple_500"
+            android:indeterminateTintMode="src_in"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

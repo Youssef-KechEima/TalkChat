@@ -2,17 +2,21 @@ package youssef.kecheima.topchat_v12.Fragments;
 
 
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,7 +32,6 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import java.util.ArrayList;
 import java.util.List;
 import youssef.kecheima.topchat_v12.Adapters.ChatListAdapter;
-import youssef.kecheima.topchat_v12.Model.AESUtils;
 import youssef.kecheima.topchat_v12.Model.Chat;
 import youssef.kecheima.topchat_v12.Model.ChatList;
 import youssef.kecheima.topchat_v12.Model.User;
@@ -47,6 +50,9 @@ public class ChatFragment extends Fragment {
     private List<User> userList;
     private List<ChatList> chatLists;
     private ChatListAdapter chatListAdapter;
+    private ProgressBar progressBar;
+    private LinearLayout add,connection;
+    private ImageButton refresh;
 
 
     @Override
@@ -56,6 +62,10 @@ public class ChatFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
         //Cast Components
         recyclerView = view.findViewById(R.id.RecyclerChatContact);
+        progressBar=view.findViewById(R.id.ProgressBarChat);
+        add=view.findViewById(R.id.addChats);
+        connection=view.findViewById(R.id.Connection);
+        refresh=view.findViewById(R.id.Refrech);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         //FireBase Instances
@@ -66,23 +76,16 @@ public class ChatFragment extends Fragment {
 
         FirebaseMessaging.getInstance().subscribeToTopic(firebaseUser.getUid());
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("Inbox").child(firebaseUser.getUid());
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                chatLists.clear();
-                for(DataSnapshot data : snapshot.getChildren()){
-                    ChatList chatList=data.getValue(ChatList.class);
-                    chatLists.add(chatList);
-                }
-                loadChats();
-            }
+        new LoadingContents().execute();
 
+        refresh.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+            public void onClick(View v) {
+                new LoadingContents().onPreExecute();
+                new LoadingContents().doInBackground();
             }
         });
+
         return view;
     }
 
@@ -155,5 +158,57 @@ public class ChatFragment extends Fragment {
         });
     }
 
+    private boolean isNetworkAvailable(){
+        ConnectivityManager connectivityManager =(ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo =connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo!=null && activeNetworkInfo.isConnected();
+    }
 
+    private class LoadingContents extends AsyncTask<Void,Void,Void>{
+        @Override
+        protected Void doInBackground(Void... voids) {
+            if(!isNetworkAvailable()){
+                progressBar.setVisibility(View.GONE);
+                connection.setVisibility(View.VISIBLE);
+            }else {
+                databaseReference = FirebaseDatabase.getInstance().getReference("Inbox").child(firebaseUser.getUid());
+                databaseReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        chatLists.clear();
+                        if (snapshot.exists()) {
+                            progressBar.setVisibility(View.GONE);
+                            connection.setVisibility(View.GONE);
+                            add.setVisibility(View.GONE);
+                            for (DataSnapshot data : snapshot.getChildren()) {
+                                ChatList chatList = data.getValue(ChatList.class);
+                                chatLists.add(chatList);
+                            }
+                            loadChats();
+                        } else {
+                            add.setVisibility(View.VISIBLE);
+                            progressBar.setVisibility(View.GONE);
+                            connection.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+            add.setVisibility(View.GONE);
+            connection.setVisibility(View.GONE);
+            progressBar.animate();
+        }
+
+    }
 }
