@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
     <LinearLayout
-        android:id="@+id/addChats"
+        android:id="@+id/Chats"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
@@ -22,8 +22,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Search for your Friends"
+            android:text="There no Conversation right now"
             android:textSize="25sp"
+            android:gravity="center"
             android:textColor="@color/black"/>
         <TextView
             android:layout_width="wrap_content"
@@ -43,7 +44,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Please connect to Wifi or Mobile Data"
+            android:text="There no network connection right now"
             android:textSize="25sp"
             android:textAlignment="center"
             android:textColor="@color/black"
@@ -68,7 +69,7 @@
         android:indeterminateTintMode="src_in"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/AddFriends"
+        android:id="@+id/AddListChats"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/chat"

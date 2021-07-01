@@ -1,6 +1,10 @@
 package youssef.kecheima.topchat_v12.Fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -9,6 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,6 +48,9 @@ public class UserFragment extends Fragment {
     private FloatingActionButton addFriends;
     private DatabaseReference databaseReference;
     private FirebaseUser firebaseUser;
+    private LinearLayout friends,connectionFriends;
+    private ProgressBar progressBar;
+    private ImageButton refreshFriends;
 
 
 
@@ -51,6 +62,10 @@ public class UserFragment extends Fragment {
         View view =inflater.inflate(R.layout.fragment_users, container, false);
         recyclerViewFriends=view.findViewById(R.id.RecyclerFriends);
         addFriends=view.findViewById(R.id.AddFriends);
+        friends=view.findViewById(R.id.Friends);
+        connectionFriends=view.findViewById(R.id.ConnectionFriends);
+        progressBar=view.findViewById(R.id.ProgressBarFriends);
+        refreshFriends=view.findViewById(R.id.RefrechFriends);
 
         addFriends.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,24 +81,15 @@ public class UserFragment extends Fragment {
         userList = new ArrayList<>();
         friendsList = new ArrayList<>();
 
-        databaseReference=FirebaseDatabase.getInstance().getReference("Friends").child(firebaseUser.getUid());
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        refreshFriends.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                friendsList.clear();
-                for(DataSnapshot data:snapshot.getChildren()){
-                    Friends friends = data.getValue(Friends.class);
-                    friendsList.add(friends);
-                }
-                loadUsers();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+            public void onClick(View v) {
+                new LoadingContens().onPreExecute();
+                new LoadingContens().doInBackground();
             }
         });
 
+        new LoadingContens().execute();
 
         return view;
     }
@@ -106,6 +112,62 @@ public class UserFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private boolean isNetworkAvailable(){
+        ConnectivityManager connectivityManager =(ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo =connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo!=null && activeNetworkInfo.isConnected();
+    }
+
+    private class LoadingContens extends AsyncTask<Void,Void,Void>{
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+            friends.setVisibility(View.GONE);
+            connectionFriends.setVisibility(View.GONE);
+            progressBar.animate();
+
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+            if(!isNetworkAvailable()){
+                progressBar.setVisibility(View.GONE);
+                connectionFriends.setVisibility(View.VISIBLE);
+                friends.setVisibility(View.GONE);
+            }
+            else {
+                databaseReference = FirebaseDatabase.getInstance().getReference("Friends").child(firebaseUser.getUid());
+                databaseReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        friendsList.clear();
+                        if (snapshot.exists()) {
+                            progressBar.setVisibility(View.GONE);
+                            friends.setVisibility(View.GONE);
+                            connectionFriends.setVisibility(View.GONE);
+                            for (DataSnapshot data : snapshot.getChildren()) {
+                                Friends friends = data.getValue(Friends.class);
+                                friendsList.add(friends);
+                            }
+                            loadUsers();
+                        }
+                        else {
+                            progressBar.setVisibility(View.GONE);
+                            friends.setVisibility(View.VISIBLE);
+                            connectionFriends.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+            return null;
+        }
     }
 
 

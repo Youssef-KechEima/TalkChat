@@ -29,13 +29,13 @@ import youssef.kecheima.topchat_v12.R;
 import youssef.kecheima.topchat_v12.Settings.FriendProfileActivity;
 
 public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.MyViewHolder> {
-    private Context context;
+    private  Context context;
     private List<User> users;
     private DatabaseReference friendRequestRef,friendRef;
     private FirebaseUser firebaseUser;
 
 
-    public RequestAdapter(Context context, List<User> users) {
+    public  RequestAdapter(Context context, List<User> users) {
         this.context = context;
         this.users = users;
     }

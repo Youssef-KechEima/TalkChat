@@ -51,7 +51,7 @@ public class ChatFragment extends Fragment {
     private List<ChatList> chatLists;
     private ChatListAdapter chatListAdapter;
     private ProgressBar progressBar;
-    private LinearLayout add,connection;
+    private LinearLayout chats,connection;
     private ImageButton refresh;
 
 
@@ -63,7 +63,7 @@ public class ChatFragment extends Fragment {
         //Cast Components
         recyclerView = view.findViewById(R.id.RecyclerChatContact);
         progressBar=view.findViewById(R.id.ProgressBarChat);
-        add=view.findViewById(R.id.addChats);
+        chats=view.findViewById(R.id.Chats);
         connection=view.findViewById(R.id.Connection);
         refresh=view.findViewById(R.id.Refrech);
         recyclerView.setHasFixedSize(true);
@@ -170,6 +170,7 @@ public class ChatFragment extends Fragment {
             if(!isNetworkAvailable()){
                 progressBar.setVisibility(View.GONE);
                 connection.setVisibility(View.VISIBLE);
+                chats.setVisibility(View.GONE);
             }else {
                 databaseReference = FirebaseDatabase.getInstance().getReference("Inbox").child(firebaseUser.getUid());
                 databaseReference.addValueEventListener(new ValueEventListener() {
@@ -179,14 +180,14 @@ public class ChatFragment extends Fragment {
                         if (snapshot.exists()) {
                             progressBar.setVisibility(View.GONE);
                             connection.setVisibility(View.GONE);
-                            add.setVisibility(View.GONE);
+                            chats.setVisibility(View.GONE);
                             for (DataSnapshot data : snapshot.getChildren()) {
                                 ChatList chatList = data.getValue(ChatList.class);
                                 chatLists.add(chatList);
                             }
                             loadChats();
                         } else {
-                            add.setVisibility(View.VISIBLE);
+                            chats.setVisibility(View.VISIBLE);
                             progressBar.setVisibility(View.GONE);
                             connection.setVisibility(View.GONE);
                         }
@@ -205,7 +206,7 @@ public class ChatFragment extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
             progressBar.setVisibility(View.VISIBLE);
-            add.setVisibility(View.GONE);
+            chats.setVisibility(View.GONE);
             connection.setVisibility(View.GONE);
             progressBar.animate();
         }
