@@ -127,6 +127,7 @@ public class UserFragment extends Fragment {
             progressBar.setVisibility(View.VISIBLE);
             friends.setVisibility(View.GONE);
             connectionFriends.setVisibility(View.GONE);
+            recyclerViewFriends.setVisibility(View.INVISIBLE);
             progressBar.animate();
 
         }
@@ -136,6 +137,7 @@ public class UserFragment extends Fragment {
                 progressBar.setVisibility(View.GONE);
                 connectionFriends.setVisibility(View.VISIBLE);
                 friends.setVisibility(View.GONE);
+                recyclerViewFriends.setVisibility(View.INVISIBLE);
             }
             else {
                 databaseReference = FirebaseDatabase.getInstance().getReference("Friends").child(firebaseUser.getUid());
@@ -147,6 +149,7 @@ public class UserFragment extends Fragment {
                             progressBar.setVisibility(View.GONE);
                             friends.setVisibility(View.GONE);
                             connectionFriends.setVisibility(View.GONE);
+                            recyclerViewFriends.setVisibility(View.VISIBLE);
                             for (DataSnapshot data : snapshot.getChildren()) {
                                 Friends friends = data.getValue(Friends.class);
                                 friendsList.add(friends);
@@ -157,6 +160,7 @@ public class UserFragment extends Fragment {
                             progressBar.setVisibility(View.GONE);
                             friends.setVisibility(View.VISIBLE);
                             connectionFriends.setVisibility(View.GONE);
+                            recyclerViewFriends.setVisibility(View.INVISIBLE);
                         }
                     }
 

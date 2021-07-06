@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -123,6 +124,7 @@ public class RequestFragment extends Fragment {
             progressBar.setVisibility(View.VISIBLE);
             request.setVisibility(View.GONE);
             connectionRequest.setVisibility(View.GONE);
+            recyclerRequest.setVisibility(View.INVISIBLE);
             progressBar.animate();
         }
 
@@ -132,6 +134,7 @@ public class RequestFragment extends Fragment {
                 progressBar.setVisibility(View.GONE);
                 connectionRequest.setVisibility(View.VISIBLE);
                 request.setVisibility(View.GONE);
+                recyclerRequest.setVisibility(View.INVISIBLE);
 
             }else {
                 Query query = FirebaseDatabase.getInstance().getReference("Friendsrequest").child(firebaseUser.getUid()).orderByChild("request_type").equalTo("received");
@@ -139,21 +142,22 @@ public class RequestFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         requestList.clear();
-                        if (snapshot.hasChildren()) {
+                        if (snapshot.exists()) {
                             progressBar.setVisibility(View.GONE);
                             connectionRequest.setVisibility(View.GONE);
                             request.setVisibility(View.GONE);
+                            recyclerRequest.setVisibility(View.VISIBLE);
                             for (DataSnapshot data : snapshot.getChildren()) {
                                 Request request = data.getValue(Request.class);
                                 requestList.add(request);
                             }
                             loadRequests();
                         }
-                        else{
+                        else {
                             progressBar.setVisibility(View.GONE);
                             connectionRequest.setVisibility(View.GONE);
                             request.setVisibility(View.VISIBLE);
-
+                            recyclerRequest.setVisibility(View.INVISIBLE);
                         }
                     }
 

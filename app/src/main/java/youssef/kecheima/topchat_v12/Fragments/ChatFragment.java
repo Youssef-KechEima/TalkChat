@@ -171,6 +171,7 @@ public class ChatFragment extends Fragment {
                 progressBar.setVisibility(View.GONE);
                 connection.setVisibility(View.VISIBLE);
                 chats.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.INVISIBLE);
             }else {
                 databaseReference = FirebaseDatabase.getInstance().getReference("Inbox").child(firebaseUser.getUid());
                 databaseReference.addValueEventListener(new ValueEventListener() {
@@ -181,6 +182,7 @@ public class ChatFragment extends Fragment {
                             progressBar.setVisibility(View.GONE);
                             connection.setVisibility(View.GONE);
                             chats.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
                             for (DataSnapshot data : snapshot.getChildren()) {
                                 ChatList chatList = data.getValue(ChatList.class);
                                 chatLists.add(chatList);
@@ -190,6 +192,7 @@ public class ChatFragment extends Fragment {
                             chats.setVisibility(View.VISIBLE);
                             progressBar.setVisibility(View.GONE);
                             connection.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.INVISIBLE);
                         }
                     }
 
@@ -208,6 +211,7 @@ public class ChatFragment extends Fragment {
             progressBar.setVisibility(View.VISIBLE);
             chats.setVisibility(View.GONE);
             connection.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.INVISIBLE);
             progressBar.animate();
         }
 
