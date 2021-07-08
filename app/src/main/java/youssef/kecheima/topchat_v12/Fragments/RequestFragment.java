@@ -117,7 +117,7 @@ public class RequestFragment extends Fragment {
         return activeNetworkInfo!=null && activeNetworkInfo.isConnected();
     }
 
-    public class LoadingContens extends AsyncTask<Void,Void,Void>{
+    private class LoadingContens extends AsyncTask<Void,Void,Void>{
         @Override
         protected void onPreExecute() {
             super.onPreExecute();

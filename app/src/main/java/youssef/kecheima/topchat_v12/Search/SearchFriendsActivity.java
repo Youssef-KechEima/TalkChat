@@ -15,6 +15,10 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -29,6 +33,9 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -54,8 +61,10 @@ public class SearchFriendsActivity extends AppCompatActivity {
     private List<User> userList;
     private FirebaseFirestore firebaseFirestore;
     private Toolbar toolbar;
-    private ImageButton back;
+    private ImageButton back,refreshSearchFriend;
     private EditText search;
+    private ProgressBar progressBar;
+    private LinearLayout connectionSearchFriend;
 
 
     @Override
@@ -72,8 +81,6 @@ public class SearchFriendsActivity extends AppCompatActivity {
             }
         });
 
-        recyclerViewFriends=findViewById(R.id.NewFriends);
-
         firebaseFirestore= FirebaseFirestore.getInstance();
         recyclerViewFriends.setHasFixedSize(true);
         recyclerViewFriends.setLayoutManager(new LinearLayoutManager(this));
@@ -88,7 +95,12 @@ public class SearchFriendsActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                filter(s.toString());
+                if(search.isEnabled()) {
+                    filter(s.toString());
+                }
+                else {
+                    Toast.makeText(SearchFriendsActivity.this, "You can't Search without internet", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -97,7 +109,51 @@ public class SearchFriendsActivity extends AppCompatActivity {
             }
         });
 
-        readUserData();
+        new LoadingContens().execute();
+
+        refreshSearchFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new LoadingContens().onPreExecute();
+                new LoadingContens().doInBackground();
+            }
+        });
+
+    }
+
+    private class LoadingContens extends AsyncTask<Void,Void,Void>{
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            recyclerViewFriends.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+            connectionSearchFriend.setVisibility(View.GONE);
+            progressBar.animate();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            if(!isNetworkAvailable()){
+                recyclerViewFriends.setVisibility(View.INVISIBLE);
+                connectionSearchFriend.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+                search.setEnabled(false);
+            }
+            else {
+                recyclerViewFriends.setVisibility(View.VISIBLE);
+                connectionSearchFriend.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
+                search.setEnabled(true);
+                readUserData();
+            }
+            return null;
+        }
+    }
+
+    private  boolean isNetworkAvailable(){
+        ConnectivityManager connectivityManager =(ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo =connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo!=null && activeNetworkInfo.isConnected();
     }
 
     private void filter(String s) {
@@ -118,17 +174,6 @@ public class SearchFriendsActivity extends AppCompatActivity {
                 recyclerViewFriends.setAdapter(userAdapter);
             }
         });
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:
-                this.finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void readUserData() {
@@ -152,10 +197,13 @@ public class SearchFriendsActivity extends AppCompatActivity {
     }
 
     private void components(){
+        recyclerViewFriends=findViewById(R.id.NewFriends);
         toolbar=findViewById(R.id.BarSearch);
         back=findViewById(R.id.back);
         search=findViewById(R.id.Search);
-
+        progressBar=findViewById(R.id.ProgressBarSearchFriend);
+        connectionSearchFriend=findViewById(R.id.ConnectionSearchFriend);
+        refreshSearchFriend=findViewById(R.id.RefrechSearchFriend);
     }
 
     @SuppressLint("NewApi")

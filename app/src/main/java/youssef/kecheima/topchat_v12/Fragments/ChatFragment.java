@@ -3,6 +3,7 @@ package youssef.kecheima.topchat_v12.Fragments;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -18,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -36,6 +38,7 @@ import youssef.kecheima.topchat_v12.Model.Chat;
 import youssef.kecheima.topchat_v12.Model.ChatList;
 import youssef.kecheima.topchat_v12.Model.User;
 import youssef.kecheima.topchat_v12.R;
+import youssef.kecheima.topchat_v12.Search.SearchChatActivity;
 
 public class ChatFragment extends Fragment {
 
@@ -53,6 +56,7 @@ public class ChatFragment extends Fragment {
     private ProgressBar progressBar;
     private LinearLayout chats,connection;
     private ImageButton refresh;
+    private FloatingActionButton addlistChats;
 
 
     @Override
@@ -66,6 +70,7 @@ public class ChatFragment extends Fragment {
         chats=view.findViewById(R.id.Chats);
         connection=view.findViewById(R.id.Connection);
         refresh=view.findViewById(R.id.Refrech);
+        addlistChats=view.findViewById(R.id.AddListChats);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         //FireBase Instances
@@ -83,6 +88,13 @@ public class ChatFragment extends Fragment {
             public void onClick(View v) {
                 new LoadingContents().onPreExecute();
                 new LoadingContents().doInBackground();
+            }
+        });
+
+        addlistChats.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), SearchChatActivity.class));
             }
         });
 
