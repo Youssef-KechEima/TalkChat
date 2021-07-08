@@ -103,24 +103,34 @@ public class SearchChatActivity extends AppCompatActivity {
 
             }
         });
+
+        new LoadingContens().execute();
+        refreshSearchChats.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new LoadingContens().onPreExecute();
+                new LoadingContens().doInBackground();
+            }
+        });
+
     }
 
     private void filter(String s) {
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        userList=new ArrayList<>();
         firebaseFirestore.collection("Users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                userList.clear();
-                for(QueryDocumentSnapshot data:queryDocumentSnapshots){
-                    User user=data.toObject(User.class);
-                    if(!user.getId().equals(firebaseUser.getUid())){
-                        if(user.getUser_name().contains(s)){
+                for (QueryDocumentSnapshot data:queryDocumentSnapshots){
+                    User user = data.toObject(User.class);
+                    for (Friends friends:friendsList){
+                        if(user.getId()!=null && user.getId().equals(friends.getFriend_id()) && user.getUser_name().contains(s)){
                             userList.add(user);
+                            break;
                         }
                     }
+                    userAdapter= new UserAdapter(userList,getApplicationContext());
+                    recyclerViewChats.setAdapter(userAdapter);
                 }
-                userAdapter=new UserAdapter(userList,getApplicationContext());
-                recyclerViewChats.setAdapter(userAdapter);
             }
         });
     }
