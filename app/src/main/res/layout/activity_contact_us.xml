@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Settings.ContactUsActivity"
+    android:orientation="vertical">
+    <include
+        android:id="@+id/ToolBarContactUs"
+        layout="@layout/bar_layout"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/Email"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="250dp"
+        android:textAlignment="center"
+        android:background="@drawable/background_edittext"
+        android:gravity="center_horizontal" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/background_edittext"
+        android:hint="@string/discribe_your_problem"
+        android:textColorHint="@color/grayprofond"
+        android:textAlignment="center"
+        android:inputType="textCapSentences|textNoSuggestions|textMultiLine"
+        android:maxLines="6"
+        android:minLines="3"
+        android:gravity="top"
+        tools:ignore="RtlCompat"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="280dp"
+        android:layout_marginLeft="280dp"
+        android:layout_marginTop="50dp"
+        android:background="@color/purple_500"
+        android:gravity="center_horizontal"
+        android:text="Send"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/purple_500" />
+</LinearLayout>

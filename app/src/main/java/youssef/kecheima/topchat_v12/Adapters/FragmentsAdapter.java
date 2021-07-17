@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
-import youssef.kecheima.topchat_v12.Fragments.CallFragment;
+
 import youssef.kecheima.topchat_v12.Fragments.ChatFragment;
 import youssef.kecheima.topchat_v12.Fragments.RequestFragment;
 import youssef.kecheima.topchat_v12.Fragments.UserFragment;
@@ -28,8 +28,6 @@ public class FragmentsAdapter extends FragmentStateAdapter {
                return new UserFragment();
            case 2:
                return new RequestFragment();
-           case 3:
-               return new CallFragment();
            default:
                return null;
        }
@@ -37,7 +35,7 @@ public class FragmentsAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 4;
+        return 3;
     }
 
 

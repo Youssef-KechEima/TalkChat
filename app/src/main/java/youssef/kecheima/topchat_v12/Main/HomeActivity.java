@@ -82,9 +82,6 @@ public class HomeActivity extends AppCompatActivity {
                          badgeDrawable2.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.red));
                          badgeDrawable2.setVisible(false);
                          break;
-                     case 3:
-                         tab.setIcon(R.drawable.phone);
-                         break;
                  }
              }
          });

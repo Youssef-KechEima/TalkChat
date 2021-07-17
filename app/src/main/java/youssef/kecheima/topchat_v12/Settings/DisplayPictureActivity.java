@@ -3,21 +3,34 @@ package youssef.kecheima.topchat_v12.Settings;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.jsibbold.zoomage.ZoomageView;
 
+import java.io.File;
+import java.io.FileOutputStream;
+
+import youssef.kecheima.topchat_v12.BuildConfig;
 import youssef.kecheima.topchat_v12.Model.Common;
 import youssef.kecheima.topchat_v12.R;
 
 public class DisplayPictureActivity extends AppCompatActivity {
-    private ImageButton share;
+    
     private ZoomageView ImageViewProfile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,21 +38,16 @@ public class DisplayPictureActivity extends AppCompatActivity {
         setContentView(R.layout.activity_display_picture);
         components();
         statusBar_and_actionBar_Tool();
-        /*back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
 
-            }
-        });*/
         ImageViewProfile.setImageBitmap(Common.IMAGE_BITMAP);
+
     }
+
 
     private void components() {
-       // back=findViewById(R.id.Back);
-        share=findViewById(R.id.Share);
         ImageViewProfile=findViewById(R.id.ImageViewProfile);
     }
+
 
     @SuppressLint("NewApi")
     private void statusBar_and_actionBar_Tool() {

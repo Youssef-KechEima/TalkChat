@@ -54,22 +54,6 @@
                     android:text="last seen"/>
             </LinearLayout>
 
-            <ImageButton
-                android:id="@+id/Phone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/phone"
-                android:layout_marginRight="10dp"
-                android:background="@android:color/transparent"
-                app:tint="@android:color/white" />
-            <ImageButton
-                android:id="@+id/Video"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/video"
-                android:layout_marginRight="10dp"
-                android:background="@android:color/transparent"
-                app:tint="@android:color/white" />
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
 

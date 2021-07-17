@@ -29,7 +29,7 @@ public class SettingsActivity extends AppCompatActivity {
     private CircleImageView userImage;
     private FirebaseUser firebaseUser;
     private FirebaseFirestore firebaseFirestore;
-    private LinearLayout userProfile,userAccount;
+    private LinearLayout userProfile,userAccount,help;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +55,13 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(SettingsActivity.this,AccountActivity.class));
+            }
+        });
+
+        help.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SettingsActivity.this,HelpActivity.class));
             }
         });
 
@@ -105,6 +112,7 @@ public class SettingsActivity extends AppCompatActivity {
         userProfile=findViewById(R.id.UserProfile);
         userAccount=findViewById(R.id.UserAccount);
         txt_Desc=findViewById(R.id.Desc);
+        help=findViewById(R.id.Help);
     }
     @SuppressLint("NewApi")
     private void statusBar_and_actionBar_Tool() {
