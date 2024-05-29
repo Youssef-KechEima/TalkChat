@@ -1,34 +1,42 @@
 {
   "project_info": {
-    "project_number": "993446157944",
-    "firebase_url": "https://topchat-55-02-default-rtdb.firebaseio.com",
-    "project_id": "topchat-55-02",
-    "storage_bucket": "topchat-55-02.appspot.com"
+    "project_number": "176526993779",
+    "firebase_url": "https://talkchat-39ffc-default-rtdb.firebaseio.com",
+    "project_id": "talkchat-39ffc",
+    "storage_bucket": "talkchat-39ffc.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:993446157944:android:4ded70c23774dbc388978d",
+        "mobilesdk_app_id": "1:176526993779:android:3fdd229aae41c462e1bd06",
         "android_client_info": {
           "package_name": "youssef.kecheima.topchat_v12"
         }
       },
       "oauth_client": [
         {
-          "client_id": "993446157944-k5si7f4jde7bvlahkj0f7kbq75jqun32.apps.googleusercontent.com",
+          "client_id": "176526993779-2mtk2skh5vbd1dkag915u8rpvjo59t48.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "youssef.kecheima.topchat_v12",
+            "certificate_hash": "8661d278f30a8399833d0ceb85c39658d744e506"
+          }
+        },
+        {
+          "client_id": "176526993779-30ajhima81ag1f4a9vdbdoalhfi0bcp1.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDblnQ39RPOaLWwNKm6k1zG-ZpIvubmv1E"
+          "current_key": "AIzaSyDpRSM5_AnuPoNHL4NCwECqlDX0SJ9tNt4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "993446157944-k5si7f4jde7bvlahkj0f7kbq75jqun32.apps.googleusercontent.com",
+              "client_id": "176526993779-30ajhima81ag1f4a9vdbdoalhfi0bcp1.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -269,7 +269,7 @@ public class MessageActivity extends AppCompatActivity {
         recordView.setOnRecordListener(new OnRecordListener() {
             @Override
             public void onStart() {
-                if(!checkPermission()){
+                if(checkPermission()){
                     fileAtach.setVisibility(View.INVISIBLE);
                     emoji.setVisibility(View.INVISIBLE);
                     camera.setVisibility(View.INVISIBLE);
@@ -285,7 +285,7 @@ public class MessageActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancel(){
+            public void onCancel() {
                 try {
                     mediaRecorder.reset();
                 }
@@ -295,7 +295,7 @@ public class MessageActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFinish(long recordTime) {
+            public void onFinish(long recordTime, boolean limitReached) {
                 fileAtach.setVisibility(View.VISIBLE);
                 emoji.setVisibility(View.VISIBLE);
                 camera.setVisibility(View.VISIBLE);
@@ -316,6 +316,11 @@ public class MessageActivity extends AppCompatActivity {
                 emoji.setVisibility(View.VISIBLE);
                 camera.setVisibility(View.VISIBLE);
                 messageText.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onLock() {
+
             }
         });
 

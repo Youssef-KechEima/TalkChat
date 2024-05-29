@@ -36,29 +36,6 @@
         android:layout_marginTop="10dp"
         android:backgroundTint="@color/purple_200"
         android:hint="@string/Email"/>
-    <RadioGroup
-        android:id="@+id/gender"
-        android:layout_width="290dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center_horizontal"
-        android:orientation="horizontal">
-        <RadioButton
-            android:id="@+id/male"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Male"
-            android:layout_marginRight="20dp"
-            android:textSize="18dp"
-            android:backgroundTint="@color/purple_500"/>
-        <RadioButton
-            android:id="@+id/female"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Female"
-            android:textSize="18dp"
-            android:backgroundTint="@color/purple_500"/>
-    </RadioGroup>
     <EditText
         android:id="@+id/Password_Regester"
         android:layout_width="290dp"

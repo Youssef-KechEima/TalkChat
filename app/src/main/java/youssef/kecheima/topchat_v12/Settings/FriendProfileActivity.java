@@ -46,7 +46,7 @@ public class FriendProfileActivity extends AppCompatActivity {
     private CircleImageView friendProfilePic;
     private TextView friendProfileName,friendProfileEmail,friendProfileGender,friendProfileAbout,txtSendRequest;
     private FirebaseFirestore firebaseFirestore;
-    private ImageView GenderLogo,sendRequest,cancelRequst,acceptRequest,acceptedRequest;
+    private ImageView sendRequest,cancelRequst,acceptRequest,acceptedRequest;
     private FirebaseUser firebaseUser;
     private DatabaseReference friendRequestRef,friendRef;
     private Button sentFirstMessage;
@@ -265,14 +265,6 @@ public class FriendProfileActivity extends AppCompatActivity {
                 friendProfileName.setText(documentSnapshot.get("user_name").toString());
                 friendProfileEmail.setText(documentSnapshot.get("email").toString());
                 friendProfileAbout.setText(documentSnapshot.get("desc").toString());
-                if(documentSnapshot.get("sexe").equals("Male")){
-                    friendProfileGender.setText(documentSnapshot.get("sexe").toString());
-                    GenderLogo.setImageResource(R.drawable.maleblack);
-                }
-                else{
-                    friendProfileGender.setText(documentSnapshot.get("sexe").toString());
-                    GenderLogo.setImageResource(R.drawable.femaleblack);
-                }
                 if(documentSnapshot.get("imageUrl").equals("default"))
                     friendProfilePic.setImageResource(R.drawable.empty_user);
                 else
@@ -341,8 +333,6 @@ public class FriendProfileActivity extends AppCompatActivity {
         friendProfilePic=findViewById(R.id.FriendPrfilePic);
         friendProfileName=findViewById(R.id.FriendProfileName);
         friendProfileEmail=findViewById(R.id.FriendProfileEmail);
-        friendProfileGender=findViewById(R.id.FriendProfileGender);
-        GenderLogo=findViewById(R.id.GenderLogo);
         sentFirstMessage=findViewById(R.id.btn_sentfirstessage);
         friendProfileback=findViewById(R.id.FriendProfileBack);
         friendProfileAbout=findViewById(R.id.FriendProfileAbout);

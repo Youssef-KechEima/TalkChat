@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import youssef.kecheima.topchat_v12.Auth.RegesterActivity;
 import youssef.kecheima.topchat_v12.Interfaces.OnReadChatCallBack;
@@ -139,7 +140,7 @@ public class ChatService {
       progressDialog= new ProgressDialog(context);
       progressDialog.show();
       progressDialog.setContentView(R.layout.progress_dialog);
-      progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+      Objects.requireNonNull(progressDialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
       final Uri uriAudio =Uri.fromFile(new File(audioPath));
       final StorageReference audioRef = FirebaseStorage.getInstance().getReference().child("Chats/VoicesAudio/"+firebaseUser.getUid()+"/"+System.currentTimeMillis());
        urlUri= audioRef.putFile(uriAudio).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {

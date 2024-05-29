@@ -62,7 +62,6 @@ public class RegesterActivity extends AppCompatActivity {
     private FirebaseFirestore firebaseFirestore;
     private ProgressDialog progressDialog;
     private RadioButton selectedRadioButton;
-    private RadioGroup gender;
     private DatabaseReference statusRef;
 
     //MAIN Methode
@@ -112,8 +111,7 @@ public class RegesterActivity extends AppCompatActivity {
                     FirebaseUser firebaseUser =firebaseAuth.getCurrentUser();
                     if(firebaseUser!=null) {
                         String userId = firebaseUser.getUid();
-                        selectedRadioButton=(RadioButton)findViewById(gender.getCheckedRadioButtonId());
-                        User users=new User(userId,fName+" "+lName,"default",mail,selectedRadioButton.getText().toString(),"Hello there i'm using TalkChat");
+                        User users=new User(userId,fName+" "+lName,"default",mail,"","Hello there i'm using TalkChat");
                         statusRef.child(firebaseUser.getUid()).child("status").setValue("online");
                         firebaseFirestore.collection("Users").document(userId)
                                 .set(users).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -158,7 +156,6 @@ public class RegesterActivity extends AppCompatActivity {
         password=findViewById(R.id.Password_Regester);
         termes=findViewById(R.id.Termes);
         regester=findViewById(R.id.Regester_Btn);
-        gender=findViewById(R.id.gender);
     }
     // Back Methode
     @Override

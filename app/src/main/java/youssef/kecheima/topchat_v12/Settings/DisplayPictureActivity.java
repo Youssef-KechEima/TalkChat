@@ -25,7 +25,6 @@ import com.jsibbold.zoomage.ZoomageView;
 import java.io.File;
 import java.io.FileOutputStream;
 
-import youssef.kecheima.topchat_v12.BuildConfig;
 import youssef.kecheima.topchat_v12.Model.Common;
 import youssef.kecheima.topchat_v12.R;
 

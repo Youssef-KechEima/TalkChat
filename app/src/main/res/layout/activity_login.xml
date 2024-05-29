@@ -15,7 +15,7 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="284dp"
+            android:layout_height="269dp"
             android:contentDescription="@string/Image"
             android:src="@drawable/chat_image" />
     </LinearLayout>
@@ -102,16 +102,16 @@
         app:backgroundTint="#38D31A" />
 
     <Button
-        android:id="@+id/Btn_Facebook"
+        android:id="@+id/btn_Google"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginLeft="50dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/facebook_button"
-        android:text="Continue with Facebook"
+        android:text="Continue with Google"
         android:textStyle="bold"
-        android:drawableLeft="@drawable/facebook"
+        android:drawableLeft="@drawable/google"
 
         app:backgroundTint="#3861E3" />
 </LinearLayout>

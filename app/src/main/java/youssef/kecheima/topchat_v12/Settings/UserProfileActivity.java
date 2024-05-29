@@ -57,13 +57,13 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Objects;
 
+import de.hdodenhof.circleimageview.BuildConfig;
 import de.hdodenhof.circleimageview.CircleImageView;
-import youssef.kecheima.topchat_v12.BuildConfig;
 import youssef.kecheima.topchat_v12.Model.Common;
 import youssef.kecheima.topchat_v12.R;
 
 public class UserProfileActivity extends AppCompatActivity {
-    private TextView txt_Name,txt_Email,Gender,txtDesc,txtAbout;
+    private TextView txt_Name,txt_Email,txtDesc,txtAbout;
     private CircleImageView UserImage;
     private FloatingActionButton addImage;
     private Toolbar toolbar;
@@ -75,6 +75,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private int IMAGE_GALLERY_REQUEST=111;
     private Uri imageUri;
     private ImageView genderLogo;
+    @SuppressLint("SuspiciousIndentation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -386,14 +387,6 @@ public class UserProfileActivity extends AppCompatActivity {
               txt_Email.setText(documentSnapshot.get("email").toString());
               txtDesc.setText(documentSnapshot.get("desc").toString());
               txtAbout.setText(documentSnapshot.get("desc").toString());
-              if(documentSnapshot.get("sexe").equals("Male")){
-                  Gender.setText(documentSnapshot.get("sexe").toString());
-                  genderLogo.setImageResource(R.drawable.male);
-              }
-              else{
-                  Gender.setText(documentSnapshot.get("sexe").toString());
-                  genderLogo.setImageResource(R.drawable.female);
-              }
               if(documentSnapshot.get("imageUrl").equals("default"))
                   UserImage.setImageResource(R.drawable.empty_user);
               else
@@ -409,8 +402,6 @@ public class UserProfileActivity extends AppCompatActivity {
         UserImage=findViewById(R.id.UserProfilePicture);
         addImage=findViewById(R.id.UploadPicture);
         edit=findViewById(R.id.btn_editName);
-        Gender=findViewById(R.id.profileGender);
-        genderLogo=findViewById(R.id.logoGender);
         txtDesc=findViewById(R.id.ProfileAboutBelowName);
         txtAbout=findViewById(R.id.ProfileAbout);
         editAbout=findViewById(R.id.btn_editAbout);
