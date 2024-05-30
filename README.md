@@ -14,7 +14,7 @@ all within a secure and user-friendly interface. Whether it's a quick catch-up o
 
 # Libraries
 Here is the libraries i used in this Project
-
+- [Firebase](https://firebase.google.com/)
 - [CircleImageView](https://github.com/hdodenhof/CircleImageView)
 - [RecordView](https://github.com/3llomi/RecordView)
 - [Glide](https://github.com/bumptech/glide)
